@@ -1,0 +1,18 @@
+a {
+    text-decoration: none;
+  }
+
+  .barcode-img {
+    max-width: 100%;
+  }
+
+  body {
+      margin-bottom: 100px;
+  }
+
+  /* Small Devices, Tablets */
+  @media only screen and (max-width : 767px) {
+      .dl-horizontal dd {
+          margin-left: 30px;
+      }
+  }
