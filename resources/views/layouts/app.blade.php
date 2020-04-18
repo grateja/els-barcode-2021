@@ -7,6 +7,7 @@
     <!-- <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <title>{{ config('app.name') }}</title>
     @yield('styles')
 </head>
 <body>
@@ -29,6 +30,7 @@
 
         </div>
     </nav>
+    <hr>
     @endif
 
     <div class="ribbon">

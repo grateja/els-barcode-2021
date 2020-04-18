@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\UsesSerialProfiler;
 use App\Traits\UsesUuid;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -9,11 +10,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FinishedGoodItem extends Model
 {
-    use UsesUuid, SoftDeletes;
+    use UsesUuid, SoftDeletes, UsesSerialProfiler;
 
     protected $fillable = [
-        'finished_good_id', 'serial_number', 'client_id', 'subdealer_id', 'warehouse', 'status', 'current_location',
+        'id', 'finished_good_id', 'client_id', 'subdealer_id', 'warehouse', 'status', 'current_location',
     ];
+
+    public function getRedirectRoute() {
+        return 'scan.finished-goods';
+    }
+
+    public function getDeletedAtAttribute($value) {
+        if($value != null) {
+            return Carbon::createFromDate($value)->format('y/M/D - h:i A');
+        } else {
+            return false;
+        }
+    }
+
+    public static function findAll($id) {
+        return static::with('finishedGood', 'subdealer', 'client', 'activityLogs')
+            ->withTrashed()
+            ->find($id);
+    }
 
     public function finishedGood() {
         return $this->belongsTo('App\FinishedGood');
@@ -48,7 +67,7 @@ class FinishedGoodItem extends Model
     }
 
     public function getModelAttribute() {
-        return $this->finishedGood ? $this->finishedGood->model : '';
+        return $this->finishedGood ? $this->finishedGood->id : '';
     }
 
     public function getDescriptionAttribute() {
@@ -59,14 +78,5 @@ class FinishedGoodItem extends Model
     }
     public function getSupplierAttribute() {
         return $this->finishedGood ? $this->finishedGood->supplier : '';
-    }
-
-    protected static function boot()
-    {
-        static::deleting(function($model) {
-            $model->serial_number = "$model->serial_number[".Carbon::now()->toString()."]";
-            $model->save();
-        });
-        parent::boot();
     }
 }

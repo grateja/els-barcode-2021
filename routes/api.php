@@ -22,7 +22,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'autocomplete'], function () {
     // /api/autocomplete/finished-goods
     Route::get('finished-goods', 'Api\FinishedGoodsController@autocomplete');
+
+    // /api/autocomplete/spare-parts
+    Route::get('spare-parts', 'Api\SparePartsController@autocomplete');
+
+    // /api/autocomplete/accounts
+    Route::get('accounts', 'Api\AccountsController@autocomplete');
 });
+
+// /api/fixed-assets
+Route::group(['prefix' => 'fixed-assets'], function() {
+    // /api/fixed-assets/generate-serial
+    Route::get('generate-serial', 'Api\FixedAssetsController@generateSerial');
+});
+
 
 // /api/users
 Route::group(['prefix' => 'users', 'middleware' => 'auth:api'], function() {

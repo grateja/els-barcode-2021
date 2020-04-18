@@ -9,7 +9,7 @@
 
             @foreach($queue->queueItems as $queueItem)
 
-                <li>{{$queueItem->code}} <input type="submit" value="remove" class="btn btn-small btn-default" formaction="/web/queues/queue-items/{{$queueItem->id}}/remove-item"></li>
+                <li>{{$queueItem->id}} <input type="submit" value="remove" class="btn btn-small btn-info" formaction="/web/queues/queue-items/{{$queueItem->id}}/remove-item"></li>
 
             @endforeach
         </ul>

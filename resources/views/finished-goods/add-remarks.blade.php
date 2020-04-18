@@ -5,7 +5,9 @@
         <h5>Add remarks</h5>
         <hr class="mt-0">
 
-        <form action="/web/finished-goods/{{$id}}/add-remarks-continue" method="post">
+        @include('printer/_series', ['code' => $serialNumber])
+
+        <form action="/web/finished-goods/items/{{$serialNumber}}/add-remarks-continue" method="post">
             {{csrf_field()}}
             <div class="form-group">
                 <label for="remarks">Remarks:</label>
@@ -17,13 +19,9 @@
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary">
-                <a href="/scan/finished-goods/{{$code}}" class="btn btn-info">Cancel</a>
+                <a href="{{ route('scan.any', $serialNumber) }}" class="btn btn-info">Cancel</a>
             </div>
         </form>
 
     </div>
-@endsection
-
-@section('styles')
-<link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}">
 @endsection

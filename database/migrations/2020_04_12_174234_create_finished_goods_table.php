@@ -14,9 +14,8 @@ class CreateFinishedGoodsTable extends Migration
     public function up()
     {
         Schema::create('finished_goods', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->comment('model');
 
-            $table->string('model')->unique();
             $table->string('description')->nullable();
             $table->string('specs')->nullable();
             $table->string('supplier')->nullable()->comment('LG, ELECTROLUX, CSI, OTHER');

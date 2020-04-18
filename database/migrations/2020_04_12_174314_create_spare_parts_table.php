@@ -14,9 +14,8 @@ class CreateSparePartsTable extends Migration
     public function up()
     {
         Schema::create('spare_parts', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->comment('part_number');
 
-            $table->string('part_number')->unique();
             $table->string('description')->nullable();
             $table->string('specs')->nullable();
             $table->string('supplier')->nullable()->comment('LG, ELECTROLUX, CSI, OTHER');

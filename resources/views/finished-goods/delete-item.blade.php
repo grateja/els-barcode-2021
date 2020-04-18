@@ -2,15 +2,16 @@
 
 @section('content')
     <div class="container">
-        <h5>Move item</h5>
+        <h5>Delete item {{$force ? 'permanently' : ''}} ?</h5>
         <hr class="mt-0">
 
-        <form method="post">
+        @include('printer/_series', ['code' => $serialNumber])
+
+        <form method="post" action="/web/finished-goods/items/{{$serialNumber}}/delete-continue/{{$force}}">
             {{csrf_field()}}
-            <div class="form-group text-center">
-                <a href="/scan/finished-goods/{{$code}}" class="btn btn-info">Cancel</a>
-                <input formaction="/web/finished-goods/{{$id}}/delete-continue" type="submit" value="delete" class="btn btn-warning">
-                <input formaction="/web/finished-goods/{{$id}}/delete-pemanently" type="submit" value="delete permanently" class="btn btn-danger">
+            <div class="form-group">
+                <input type="submit" value="Delete {{$force ? 'permanently' : ''}}" class="btn btn-{{$force ? 'danger' : 'warning'}}">
+                <a href="{{ route('scan.any', $serialNumber) }}" class="btn btn-info">Cancel</a>
             </div>
         </form>
 

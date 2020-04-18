@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use Laravel\Passport\Client;
+use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Passport::ignoreMigrations();
     }
 
     /**
@@ -24,6 +27,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Client::creating(function(Client $client) {
+            $client->incrementing = false;
+            $client->id = Str::uuid();
+        });
+
+        Client::retrieved(function(Client $client) {
+            $client->incrementing = false;
+        });
+
         Schema::defaultStringLength(191);
     }
 }

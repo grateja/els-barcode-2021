@@ -11,7 +11,7 @@ class QueueItemsController extends Controller
     public function deleteItem($id) {
         $queueItem = QueueItem::findOrFail($id);
 
-        $queueItem->delete();
+        $queueItem->forceDelete();
         return redirect(route('queues.default'));
     }
 

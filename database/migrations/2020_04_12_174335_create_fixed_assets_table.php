@@ -14,9 +14,8 @@ class CreateFixedAssetsTable extends Migration
     public function up()
     {
         Schema::create('fixed_assets', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->comment('series');
 
-            $table->string('series')->unique();
             $table->string('description')->nullable();
             $table->string('specs')->nullable();
             $table->uuid('account_id')->nullable();

@@ -4,18 +4,22 @@
 
     <div class="container">
         @if($model == null)
-            <div class="alert alert-warning">Item does not exist. <span class="code btn btn-small btn-default">{{$code}}</span>
-                <a href="/web/finished-goods/{{$code}}/add-to-inventory" class="btn btn-primary">Add to inventory</a>
-                <a href="/web/queues/{{$code}}/add-to-queue/finished-goods" class="btn btn-primary">Add to queue</a>
+            <h4>No record found for this serial number</h4>
+            <div class="card">
+
+                <div class="text-center p-2">
+                    @include('printer/_series', ['code' => $serialNumber])
+                </div>
             </div>
+            <a class="m-2 btn btn-block btn-info" href="/web/finished-goods/items/{{$serialNumber}}/add-to-inventory">Add to inventory</a>
+            <a class="m-2 btn btn-block btn-info" href="/web/queues/{{$serialNumber}}/add-to-queue/finished-goods">Add to queue</a>
         @else
-            <h5>Item info</h5>
-            <hr class="mt-0 mb-0">
+            <h5>Finished good</h5>
+            <hr class="mt-0 mb-3">
             <dl class="row">
                 <dt class="col-5 text-right">Model:</dt>
                 <dd class="col-7">
-                    {{$model['model']}}
-                    @include('printer/_barcode', ['code' => $model['model']])
+                    @include('printer/_series', ['code' => $model['model']])
                 </dd>
 
                 <dt class="col-5 text-right">Description:</dt>
@@ -23,8 +27,7 @@
 
                 <dt class="col-5 text-right">Serial number:</dt>
                 <dd class="col-7">
-                    {{$model['serialNumber']}}
-                    @include('printer/_barcode', ['code' => $code])
+                    @include('printer/_series', ['code' => $serialNumber])
                 </dd>
 
                 <dt class="col-5 text-right">Specs:</dt>
@@ -41,12 +44,22 @@
 
                 <dt class="col-5 text-right">Location:</dt>
                 <dd class="col-7">{{$model['currentLocation']}}</dd>
+
+                @if($model['deletedAt'])
+                    <dt class="col-5 text-right">Deleted at:</dt>
+                    <dd class="col-7">{{$model['deletedAt']}}</dd>
+                @endif
             </dl>
             <div class="text-center">
-                <a href="/web/finished-goods/{{$model['serialNumber']}}/add-remarks" class="btn btn-sm btn-primary">add remarks</a>
-                <a href="/web/finished-goods/{{$model['serialNumber']}}/add-to-inventory" class="btn btn-sm btn-info">edit</a>
-                <a href="/web/finished-goods/{{$model['serialNumber']}}/move" class="btn btn-sm btn-info">move</a>
-                <a href="/web/finished-goods/{{$model['serialNumber']}}/delete" class="btn btn-sm btn-warning">delete</a>
+                @if($model['deletedAt'])
+                    <a id="btnRestore" href="/web/finished-goods/items/{{$serialNumber}}/restore" class="btn btn-sm btn-info">restore</a>
+                    <a id="btnForceDelete" href="/web/finished-goods/items/{{$serialNumber}}/delete" class="btn btn-sm btn-danger">delete permanently</a>
+                @else
+                    <a href="/web/finished-goods/items/{{$serialNumber}}/add-remarks" class="btn btn-sm btn-primary">add remarks</a>
+                    <a href="/web/finished-goods/items/{{$serialNumber}}/add-to-inventory" class="btn btn-sm btn-info">edit</a>
+                    <a href="/web/finished-goods/items/{{$serialNumber}}/move" class="btn btn-sm btn-info">move</a>
+                    <a href="/web/finished-goods/items/{{$serialNumber}}/delete" class="btn btn-sm btn-warning">delete</a>
+                @endif
             </div>
             <hr>
             @if($model['client'])

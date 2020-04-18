@@ -1,5 +1,6 @@
-<form action="/web/finished-goods/{{$action}}{{$id}}" method="POST">
+<form action="/web/finished-goods/items/{{$action}}" method="POST">
     {{csrf_field()}}
+
     <div class="form-group">
         <label for="model">Model:</label>
         <input type="text" name="model" id="model" value="{{old('model') ? old('model') : $model}}" class="form-control">
@@ -57,8 +58,8 @@
     </div>
 
     <div class="form-group">
-        <input type="submit" value="{{$action}}" class="btn btn-primary">
-        <a href="/scan/finished-goods/{{$code}}" class="btn btn-info">Cancel</a>
+        <input type="submit" value="Save" class="btn btn-primary">
+        <a href="{{ route('scan.any', $serialNumber) }}" class="btn btn-info">Cancel</a>
     </div>
 
 </form>

@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\DB;
 class FinishedGoodsController extends Controller
 {
     public function autocomplete(Request $request) {
-        $result = FinishedGood::where('model', 'like', "%$request->keyword%")
+        $result = FinishedGood::where('id', 'like', "%$request->keyword%")
             ->orWhere('description', 'like', "%$request->keyword%")
-            ->select('*', DB::raw('CONCAT(`model`, " - ", `description`, IF(`specs` <> "", CONCAT(" - (", `specs`, ")"), "")) as display, supplier'))
+            ->select('*', DB::raw('`id` as model, CONCAT(`id`, " - ", `description`, IF(`specs` <> "", CONCAT(" - (", `specs`, ")"), "")) as display, supplier'))
             ->limit(10)
             ->get();
 

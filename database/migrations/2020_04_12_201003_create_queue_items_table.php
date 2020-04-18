@@ -14,12 +14,12 @@ class CreateQueueItemsTable extends Migration
     public function up()
     {
         Schema::create('queue_items', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->comment('series');
 
             $table->uuid('queue_id');
-            $table->string('code');
 
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('queue_id')->references('id')->on('queues')->onUpdate('CASCADE')->onDelete('CASCADE');
         });

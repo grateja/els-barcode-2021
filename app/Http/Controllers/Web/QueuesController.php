@@ -35,7 +35,7 @@ class QueuesController extends Controller
 
     public function saveToQueue(Request $request) {
         $rules = [
-            'code' => 'required|unique:queue_items'
+            'code' => 'required|unique:queue_items,id'
         ];
 
         $queue = Queue::where([
@@ -57,8 +57,8 @@ class QueuesController extends Controller
                 }
 
                 $queueItem = QueueItem::create([
+                    'id' => $request->code,
                     'queue_id' => $queue->id,
-                    'code' => $request->code,
                 ]);
 
                 return redirect(route('queues.default'));
@@ -119,7 +119,7 @@ class QueuesController extends Controller
             'done' => false,
         ])->orderByDesc('created_at')->first();
 
-        $queueItem = QueueItem::where('code', $code)->first();
+        $queueItem = QueueItem::find($code);
 
         if($queueItem != null) {
             $errors = [
@@ -131,7 +131,6 @@ class QueuesController extends Controller
             'queue' => $queue,
             'model' => $queueItem,
             'code' => $code,
-            'origin' => $origin,
             'prefName' => "scan.$origin." . date('M-d:h-i'),
         ])->withErrors($errors);
     }

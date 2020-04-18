@@ -14,10 +14,9 @@ class CreateSparePartItemsTable extends Migration
     public function up()
     {
         Schema::create('spare_part_items', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id')->primary()->comment('serial_number');
 
             $table->uuid('spare_part_id');
-            $table->string('serial_number')->unique();
 
             $table->uuid('client_id')->nullable()->comment('CURRENT CLIENT (IF ANY)');
             $table->uuid('subdealer_id')->nullable()->comment('CURRENT SUBDEALER (IF ANY)');

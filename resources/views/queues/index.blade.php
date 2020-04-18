@@ -11,7 +11,7 @@
         <form method="post">
             {{csrf_field()}}
             <input type="submit" value="Complete" class="btn btn-primary" formaction="/web/queues/complete">
-            <input type="submit" value="Clear" class="btn btn-primary" formaction="/web/queues/clear">
+            <input type="submit" value="Clear" class="btn btn-danger" formaction="/web/queues/clear">
         </form>
     @endif
 </div>

@@ -25,6 +25,7 @@
 
     <div class="form-group">
         <input type="submit" value="Save" class="btn btn-primary">
-        <a href="/scan/{{$origin}}/{{$code}}" class="btn btn-info">cancel</a>
+        <a href="{{ route('scan.any', ['code' => $code]) }}" class="btn btn-info">cancel</a>
+        <a href="/web/queues" class="btn btn-info">view all</a>
     </div>
 </form>

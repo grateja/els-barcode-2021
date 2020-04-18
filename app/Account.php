@@ -10,6 +10,10 @@ class Account extends Model
 {
     use UsesUuid, SoftDeletes;
 
+    protected $fillable = [
+        'id', 'name', 'department',
+    ];
+
     public function fixedAssets() {
         return $this->hasMany('App\FixedAsset');
     }
