@@ -37,7 +37,7 @@ class SparePartsController extends Controller
         ]);
     }
 
-    public function addProfile($partNumber = null) {
+    public function addProfile($partNumber = null, $serialNumber = null) {
         $sparePart = SparePart::find($partNumber);
 
         return view('spare-parts.profiles.create', [
@@ -45,7 +45,8 @@ class SparePartsController extends Controller
             'description' => $sparePart ? $sparePart->description : null,
             'specs' => $sparePart ? $sparePart->specs : null,
             'supplier' => $sparePart ? $sparePart->supplier : null,
-            'action' => $sparePart == null ? 'insert' : $partNumber . '/update',
+            'action' => $sparePart == null ? 'insert' : $partNumber . '/update/' . $serialNumber,
+            'serialNumber' => $serialNumber,
         ]);
     }
 
@@ -71,7 +72,7 @@ class SparePartsController extends Controller
         }
     }
 
-    public function update(Request $request, $partNumber) {
+    public function update(Request $request, $partNumber, $serialNumber = null) {
         $rules = [
             'partNumber' => 'required',
             'description' => 'required',
@@ -86,7 +87,7 @@ class SparePartsController extends Controller
         }
 
         if($request->validate($rules)) {
-            return DB::transaction(function () use ($request, $sparePart) {
+            return DB::transaction(function () use ($request, $sparePart, $serialNumber) {
                 $sparePart->update([
                     'id' => $request->partNumber,
                     'description' => $request->description,
@@ -94,7 +95,7 @@ class SparePartsController extends Controller
                     'supplier' => $request->supplier,
                 ]);
 
-                return redirect(route('scan.any', ['code' => $sparePart->id]));
+                return redirect(route('scan.any', ['code' => $serialNumber ? $serialNumber : $sparePart->id]));
             });
         }
     }

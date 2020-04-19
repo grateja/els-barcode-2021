@@ -8,6 +8,9 @@ import user from './modules/user.js';
 import exportdownload from './modules/exportdownload.js';
 import printer from './modules/printer.js';
 
+import incomingFinishedGoodReport from './modules/incomingFinishedGoodReport.js';
+import finishedGood from './modules/finishedGood.js';
+
 export default new  Vuex.Store({
     state: {
         currentUser: null,
@@ -59,6 +62,8 @@ export default new  Vuex.Store({
         account,
         user,
         exportdownload,
-        printer
+        printer,
+        incomingFinishedGoodReport,
+        finishedGood
     }
 });

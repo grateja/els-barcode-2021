@@ -37,7 +37,7 @@ class FinishedGoodsController extends Controller
         ]);
     }
 
-    public function addProfile($model = null) {
+    public function addProfile($model = null, $serialNumber = null) {
         $finishedGood = FinishedGood::find($model);
 
         return view('finished-goods.profiles.create', [
@@ -45,7 +45,8 @@ class FinishedGoodsController extends Controller
             'description' => $finishedGood ? $finishedGood->description : null,
             'specs' => $finishedGood ? $finishedGood->specs : null,
             'supplier' => $finishedGood ? $finishedGood->supplier : null,
-            'action' => $finishedGood == null ? 'insert' : $model . '/update',
+            'action' => $finishedGood == null ? 'insert' : $model . '/update/' . $serialNumber,
+            'serialNumber' => $serialNumber,
         ]);
     }
 
@@ -71,7 +72,7 @@ class FinishedGoodsController extends Controller
         }
     }
 
-    public function update(Request $request, $model) {
+    public function update(Request $request, $model, $serialNumber = null) {
         $rules = [
             'model' => 'required',
             'description' => 'required',
@@ -86,7 +87,7 @@ class FinishedGoodsController extends Controller
         }
 
         if($request->validate($rules)) {
-            return DB::transaction(function () use ($request, $finishedGood) {
+            return DB::transaction(function () use ($request, $finishedGood, $serialNumber) {
                 $finishedGood->update([
                     'id' => $request->model,
                     'description' => $request->description,
@@ -94,7 +95,7 @@ class FinishedGoodsController extends Controller
                     'supplier' => $request->supplier,
                 ]);
 
-                return redirect(route('scan.any', ['code' => $finishedGood->id]));
+                return redirect(route('scan.any', ['code' => $serialNumber ? $serialNumber : $finishedGood->id]));
             });
         }
     }

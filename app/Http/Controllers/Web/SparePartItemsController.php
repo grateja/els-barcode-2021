@@ -157,6 +157,7 @@ class SparePartItemsController extends Controller
 
                 $sparePartItem->update([
                     'id' => $request->serialNumber,
+                    'spare_part_id' => $request->partNumber,
                     'warehouse' => $request->warehouse,
                     'current_location' => $request->currentLocation,
                 ]);

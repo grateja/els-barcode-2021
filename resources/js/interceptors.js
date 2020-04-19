@@ -29,6 +29,11 @@ axios.interceptors.response.use(null, err => {
         } else {
             setFlash(err.response.data.errors);
         }
+    } else if(err && err.response && err.response.status == 404) {
+        store.commit('setFlash', {
+            message: 'Error 404',
+            color: 'error'
+        });
     }
     return Promise.reject(err);
 });

@@ -20,6 +20,7 @@
                 <dt class="col-5 text-right">Part number:</dt>
                 <dd class="col-7">
                     @include('printer/_series', ['code' => $model['partNumber']])
+                    <a href="/web/spare-parts/{{$model['partNumber']}}/add-profile/{{$serialNumber}}" class="btn btn-sm btn-outline-info">edit part number</a>
                 </dd>
 
                 <dt class="col-5 text-right">Description:</dt>

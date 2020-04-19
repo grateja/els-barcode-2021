@@ -43,14 +43,14 @@ Route::group(['prefix' => 'web'], function() {
 
         // /web/finished-goods
         Route::group(['prefix' => 'finished-goods'], function () {
-            // /web/finished-goods/{model?}/add-profile
-            Route::get('{model?}/add-profile', 'Web\FinishedGoodsController@addProfile');
+            // /web/finished-goods/{model?}/add-profile/{serialNumber}
+            Route::get('{model?}/add-profile/{serialNumber?}', 'Web\FinishedGoodsController@addProfile');
 
             // /web/finished-goods/insert
             Route::post('insert', 'Web\FinishedGoodsController@insert');
 
-            // /web/finished-goods/{model}/update
-            Route::post('{model}/update', 'Web\FinishedGoodsController@update');
+            // /web/finished-goods/{model}/update/{serialNumber}
+            Route::post('{model}/update/{serialNumber?}', 'Web\FinishedGoodsController@update');
 
             // /web/finished-goods/items
             Route::group(['prefix' => 'items'], function () {
@@ -91,14 +91,14 @@ Route::group(['prefix' => 'web'], function() {
 
         // /web/spare-parts
         Route::group(['prefix' => 'spare-parts'], function () {
-            // /web/spare-parts/{model?}/add-profile
-            Route::get('{model?}/add-profile', 'Web\SparePartsController@addProfile');
+            // /web/spare-parts/{model?}/add-profile/{serialNumber}
+            Route::get('{model?}/add-profile/{serialNumber?}', 'Web\SparePartsController@addProfile');
 
             // /web/spare-parts/insert
             Route::post('insert', 'Web\SparePartsController@insert');
 
-            // /web/spare-parts/{model}/update
-            Route::post('{model}/update', 'Web\SparePartsController@update');
+            // /web/spare-parts/{model}/update/{serialNumber?}
+            Route::post('{model}/update/{serialNumber?}', 'Web\SparePartsController@update');
 
             // /web/spare-parts/items
             Route::group(['prefix' => 'items'], function () {
@@ -169,7 +169,7 @@ Route::group(['prefix' => 'web'], function() {
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('web.login');
 });
 
-//Auth::routes();
+Auth::routes();
 
 
 // /scan

@@ -1,6 +1,16 @@
 <template>
     <div class="autocomplete">
-        <v-combobox :loading="loading" :error-messages="ErrorMessage" :label="label" :value="value" :items="items" @input.native="input($event)" @change="select" @keydown.native.enter="$emit('enter', $event)"></v-combobox>
+        <v-combobox
+            outline
+            :loading="loading"
+            :error-messages="errorMessages"
+            :label="label"
+            :value="value"
+            :items="items"
+            @input.native="input($event)"
+            @change="select"
+            @keydown.native.enter="$emit('enter', $event)">
+        </v-combobox>
     </div>
 </template>
 
@@ -9,14 +19,14 @@ export default {
     props: {
         value: {},
         url: '',
-        data_source: {
+        dataSource: {
             default: 'data'
         },
-        data_field: {
-            default: 'name'
+        dataField: {
+            default: 'display'
         },
         label: {},
-        ErrorMessage: {}
+        errorMessages: {}
     },
     data() {
         return {
@@ -28,7 +38,7 @@ export default {
     },
     methods: {
         select(e) {
-            let selected = this.raw.filter(d => d[this.data_field] == e);
+            let selected = this.raw.filter(d => d[this.dataField] == e);
             if(selected.length) {
                 this.$emit('select', selected[0]);
                 this.$emit('input', e);
@@ -51,8 +61,8 @@ export default {
                     params: {keyword: val},
                     cancelToken: this.cancelSource.token
                 }).then((res) => {
-                    console.log(e);
-                    this.raw = res.data[this.data_source];
+                    console.log(res.data);
+                    this.raw = res.data[this.dataSource];
                     this.loading = false;
                 }).catch(err => {
                     this.loading = false;
@@ -70,7 +80,7 @@ export default {
     },
     computed: {
         items() {
-            return this.raw.map(item => item[this.data_field]);
+            return this.raw.map(item => item[this.dataField]);
         }
     }
 }

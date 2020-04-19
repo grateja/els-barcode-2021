@@ -41,7 +41,7 @@
 
         <div class="form-group">
             <input type="submit" value="Save" class="btn btn-primary">
-            <a href="{{ route('scan.any', ['code' => $model]) }}" class="btn btn-info">Cancel</a>
+            <a href="{{ route('scan.any', ['code' => $serialNumber ? $serialNumber : $model]) }}" class="btn btn-info">Cancel</a>
         </div>
 
     </form>

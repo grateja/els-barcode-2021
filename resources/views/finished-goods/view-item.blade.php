@@ -20,6 +20,7 @@
                 <dt class="col-5 text-right">Model:</dt>
                 <dd class="col-7">
                     @include('printer/_series', ['code' => $model['model']])
+                    <a href="/web/finished-goods/{{$model['model']}}/add-profile/{{$serialNumber}}" class="btn btn-sm btn-outline-info">edit model</a>
                 </dd>
 
                 <dt class="col-5 text-right">Description:</dt>

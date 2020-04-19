@@ -157,6 +157,7 @@ class FinishedGoodItemsController extends Controller
 
                 $finishedGoodItem->update([
                     'id' => $request->serialNumber,
+                    'finished_good_id' => $request->model,
                     'warehouse' => $request->warehouse,
                     'current_location' => $request->currentLocation,
                 ]);

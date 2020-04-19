@@ -109,11 +109,53 @@ export default {
             needsToHide: true,
             links: [
                 {
-                    text: 'Clients',
-                    icon: '',
-                    roles: ['developer'],
+                    text: 'Incoming reports',
+                    icon: 'call_received',
+                    roles: ['admin', 'developer'],
                     color: '#a7a1e6',
-                    to: '/clients'
+                    to: '/incoming-reports/finished-goods'
+                },
+                {
+                    text: 'Outgoing reports',
+                    icon: 'call_made',
+                    roles: ['admin', 'developer'],
+                    color: '#a7a1e6',
+                    to: '/outgoing-reports/finished-goods'
+                },
+                {
+                    text: 'Reservations',
+                    icon: 'archive',
+                    roles: ['admin', 'developer'],
+                    color: '#a7a1e6',
+                    to: '/reservations'
+                },
+                {
+                    text: 'Finished goods',
+                    icon: 'local_laundry_service',
+                    roles: ['admin', 'developer'],
+                    color: '#a7a1e6',
+                    to: '/finished-goods'
+                },
+                {
+                    text: 'Spare parts',
+                    icon: 'developer_board',
+                    roles: ['admin', 'developer'],
+                    color: '#a7a1e6',
+                    to: '/spare-parts'
+                },
+                {
+                    text: 'Fixed assets',
+                    icon: 'account_balance_wallet',
+                    roles: ['admin', 'developer'],
+                    color: '#a7a1e6',
+                    to: '/fixed-assets'
+                },
+                {
+                    text: 'Queues',
+                    icon: 'clear_all',
+                    roles: ['admin', 'developer'],
+                    color: '#a7a1e6',
+                    to: '/queues'
                 }
             ]
         }

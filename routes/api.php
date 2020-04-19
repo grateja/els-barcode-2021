@@ -30,6 +30,46 @@ Route::group(['prefix' => 'autocomplete'], function () {
     Route::get('accounts', 'Api\AccountsController@autocomplete');
 });
 
+// /api/incoming-reports
+Route::group(['prefix' => 'incoming-reports', 'middleware' => 'auth:api'], function () {
+    // /api/incoming-reports/finished-goods
+    Route::group(['prefix' => 'finished-goods'], function () {
+        // /api/incoming-reports/finished-goods
+        Route::get('/', 'Api\IncomingFinishedGoodsController@index');
+
+        // /api/incoming-reports/finished-goods/{reportId}/delete
+        Route::post('{reportId}/delete', 'Api\IncomingFinishedGoodsController@delete');
+
+        // /api/incoming-reports/finished-goods/create
+        Route::post('create', 'Api\IncomingFinishedGoodsController@create');
+
+        // /api/incoming-reports/finished-goods/{reportId}/update
+        Route::post('{reportId}/update', 'Api\IncomingFinishedGoodsController@update');
+
+        // /api/incoming-reports/finished-goods/{reportId}/view-items
+        Route::get('{reportId}/view-items', 'Api\IncomingFinishedGoodReportItemsController@index');
+
+        // /api/incoming-reports/finished-goods/{reportId}/add-items
+        Route::post('{reportId}/add-items', 'Api\IncomingFinishedGoodReportItemsController@addItems');
+
+        // /api/incoming-reports/finished-goods/{reportId}/remove-items
+        Route::post('{reportId}/remove-items', 'Api\IncomingFinishedGoodReportItemsController@removeItems');
+    });
+});
+
+// /api/finished-goods
+Route::group(['prefix' => 'finished-goods', 'middleware' => 'auth:api'], function () {
+    // /api/finished-goods/items
+    Route::group(['prefix' => 'items'], function () {
+        // /api/finished-goods/items/
+        Route::get('/', 'Api\FinishedGoodItemsController@index');
+
+        // /api/finished-goods/items/create
+        Route::post('create', 'Api\FinishedGoodItemsController@create');
+    });
+
+});
+
 // /api/fixed-assets
 Route::group(['prefix' => 'fixed-assets'], function() {
     // /api/fixed-assets/generate-serial
