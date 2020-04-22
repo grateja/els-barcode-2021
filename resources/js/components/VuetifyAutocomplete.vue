@@ -39,11 +39,13 @@ export default {
     methods: {
         select(e) {
             let selected = this.raw.filter(d => d[this.dataField] == e);
+            console.log('select');
             if(selected.length) {
                 this.$emit('select', selected[0]);
                 this.$emit('input', e);
                 this.$emit('change', e);
             }
+            this.raw = [];
         },
         input(e) {
             let val = e.target.value;
@@ -53,20 +55,16 @@ export default {
             this.cancelSearch();
             this.cancelSource = axios.CancelToken.source();
 
-            console.log(this.url)
-
             if(val.length > 0){
                 this.loading = true;
                 axios.get(this.url, {
                     params: {keyword: val},
                     cancelToken: this.cancelSource.token
                 }).then((res) => {
-                    console.log(res.data);
                     this.raw = res.data[this.dataSource];
                     this.loading = false;
                 }).catch(err => {
                     this.loading = false;
-                    // console.log(err);
                 });
             } else {
                 this.raw = [];
@@ -74,6 +72,7 @@ export default {
         },
         cancelSearch(){
             if(this.cancelSource){
+                this.raw = [];
                 this.cancelSource.cancel();
             }
         }

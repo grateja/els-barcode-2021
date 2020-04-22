@@ -7,6 +7,7 @@ use App\FinishedGood;
 use App\FinishedGoodItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\SeriesConflict;
 use Illuminate\Support\Facades\DB;
 
 class FinishedGoodItemsController extends Controller
@@ -25,6 +26,10 @@ class FinishedGoodItemsController extends Controller
     }
 
     public function create(Request $request) {
+        if($err = SeriesConflict::check($request, 'serialNumber')) {
+            return $err;
+        }
+
         return DB::transaction(function () use ($request) {
             $rules = [
                 'serialNumber' => 'required|unique:finished_good_items,id',

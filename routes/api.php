@@ -55,6 +55,69 @@ Route::group(['prefix' => 'incoming-reports', 'middleware' => 'auth:api'], funct
         // /api/incoming-reports/finished-goods/{reportId}/remove-items
         Route::post('{reportId}/remove-items', 'Api\IncomingFinishedGoodReportItemsController@removeItems');
     });
+
+    // /api/incoming-reports/spare-parts
+    Route::group(['prefix' => 'spare-parts'], function () {
+        // /api/incoming-reports/spare-parts
+        Route::get('/', 'Api\IncomingSparePartsController@index');
+
+        // /api/incoming-reports/spare-parts/{reportId}/delete
+        Route::post('{reportId}/delete', 'Api\IncomingSparePartsController@delete');
+
+        // /api/incoming-reports/spare-parts/create
+        Route::post('create', 'Api\IncomingSparePartsController@create');
+
+        // /api/incoming-reports/spare-parts/{reportId}/update
+        Route::post('{reportId}/update', 'Api\IncomingSparePartsController@update');
+
+        // /api/incoming-reports/spare-parts/{reportId}/view-items
+        Route::get('{reportId}/view-items', 'Api\IncomingSparePartReportItemsController@index');
+
+        // /api/incoming-reports/spare-parts/{reportId}/add-items
+        Route::post('{reportId}/add-items', 'Api\IncomingSparePartReportItemsController@addItems');
+
+        // /api/incoming-reports/spare-parts/{reportId}/remove-items
+        Route::post('{reportId}/remove-items', 'Api\IncomingSparePartReportItemsController@removeItems');
+    });
+});
+
+// /api/reservations
+Route::group(['prefix' => 'reservations', 'middleware' => 'auth:api'], function () {
+    // /api/reservations
+    Route::get('', 'Api\ReservationsController@index');
+
+    // /api/reservations/{reportId}
+    Route::get('{reportId}', 'Api\ReservationsController@show');
+
+    // /api/reservations/create
+    Route::post('create', 'Api\ReservationsController@create');
+
+    // /api/reservations/{reportId}/update
+    Route::post('{reportId}/update', 'Api\ReservationsController@update');
+
+    // /api/reservations/finished-goods
+    Route::group(['prefix' => 'finished-goods'], function () {
+        // /api/reservations/finished-goods/{reservationId}/view-items
+        Route::get('{reservationId}/view-items', 'Api\ReservedFinishedGoodItemsController@index');
+
+        // /api/reservations/finished-goods/{reportId}/add-items
+        Route::post('{reportId}/add-items', 'Api\ReservedFinishedGoodItemsController@addItems');
+
+        // /api/reservations/finished-goods/{reportId}/remove-items
+        Route::post('{reportId}/remove-items', 'Api\ReservedFinishedGoodItemsController@removeItems');
+    });
+
+    // /api/reservations/spare-parts
+    Route::group(['prefix' => 'spare-parts'], function () {
+        // /api/reservations/spare-parts/{reservationId}/view-items
+        Route::get('{reservationId}/view-items', 'Api\ReservedSparePartItemsController@index');
+
+        // /api/reservations/spare-parts/{reportId}/add-items
+        Route::post('{reportId}/add-items', 'Api\ReservedSparePartItemsController@addItems');
+
+        // /api/reservations/spare-parts/{reportId}/remove-items
+        Route::post('{reportId}/remove-items', 'Api\ReservedSparePartItemsController@removeItems');
+    });
 });
 
 // /api/finished-goods
@@ -70,11 +133,42 @@ Route::group(['prefix' => 'finished-goods', 'middleware' => 'auth:api'], functio
 
 });
 
+// /api/spare-parts
+Route::group(['prefix' => 'spare-parts', 'middleware' => 'auth:api'], function () {
+    // /api/spare-parts/items
+    Route::group(['prefix' => 'items'], function () {
+        // /api/spare-parts/items/
+        Route::get('/', 'Api\SparePartItemsController@index');
+
+        // /api/spare-parts/items/create
+        Route::post('create', 'Api\SparePartItemsController@create');
+    });
+
+});
+
 // /api/fixed-assets
 Route::group(['prefix' => 'fixed-assets'], function() {
     // /api/fixed-assets/generate-serial
     Route::get('generate-serial', 'Api\FixedAssetsController@generateSerial');
 });
+
+// /api/clients
+Route::group(['prefix' => 'clients', 'middleware' => 'auth:api'], function () {
+    Route::get('/', 'Api\ClientsController@index');
+
+    // /api/clients/create
+    Route::post('create', 'Api\ClientsController@create');
+});
+
+// /api/subdealers
+Route::group(['prefix' => 'subdealers', 'middleware' => 'auth:api'], function () {
+    Route::get('/', 'Api\SubdealersController@index');
+
+    // /api/subdealers/create
+    Route::post('create', 'Api\SubdealersController@create');
+});
+
+
 
 
 // /api/users

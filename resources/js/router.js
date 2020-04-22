@@ -15,8 +15,16 @@ const routes = [
             {
                 path: 'finished-goods',
                 component: require('./views/incoming-reports/finished-goods/Index.vue').default,
+            },
+            {
+                path: 'spare-parts',
+                component: require('./views/incoming-reports/spare-parts/Index.vue').default,
             }
         ]
+    },
+    {
+        path: '/reservations',
+        component: require('./views/reservations/Index.vue').default
     }
 ];
 

@@ -46,6 +46,10 @@ class SparePartItem extends Model
         return $this->belongsToMany('App\OutgoingSparePartReport', 'outgoing_s_p_report_items', 'spare_part_item_id', 'outgoing_report_id');
     }
 
+    public function reservations() {
+        return $this->belongsToMany('App\Reservation', 'reserved_spare_parts', 'spare_part_item_id', 'reservation_id');
+    }
+
     public function incomingReport() {
         return $this->incomingSparePartReports()->orderByDesc('created_at')->first();
     }

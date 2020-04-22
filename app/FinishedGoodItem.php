@@ -46,6 +46,10 @@ class FinishedGoodItem extends Model
         return $this->belongsToMany('App\OutgoingFinishedGoodReport', 'outgoing_f_g_report_items', 'finished_good_item_id', 'outgoing_report_id');
     }
 
+    public function reservations() {
+        return $this->belongsToMany('App\Reservation', 'reserved_finished_goods', 'finished_good_item_id', 'reservation_id');
+    }
+
     public function incomingReport() {
         return $this->incomingFinishedGoodReports()->orderByDesc('created_at')->first();
     }

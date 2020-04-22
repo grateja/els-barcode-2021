@@ -9,7 +9,13 @@ import exportdownload from './modules/exportdownload.js';
 import printer from './modules/printer.js';
 
 import incomingFinishedGoodReport from './modules/incomingFinishedGoodReport.js';
+import incomingSparePartReport from './modules/incomingSparePartReport.js';
 import finishedGood from './modules/finishedGood.js';
+import sparePart from './modules/sparePart.js';
+
+import reservation from './modules/reservation.js';
+import client from './modules/client.js';
+import subdealer from './modules/subdealer.js';
 
 export default new  Vuex.Store({
     state: {
@@ -64,6 +70,11 @@ export default new  Vuex.Store({
         exportdownload,
         printer,
         incomingFinishedGoodReport,
-        finishedGood
+        finishedGood,
+        incomingSparePartReport,
+        sparePart,
+        reservation,
+        client,
+        subdealer
     }
 });

@@ -18,6 +18,7 @@ class CreateSubdealersTable extends Migration
 
             $table->string('subdealer_name')->nullable();
             $table->string('company_name')->nullable();
+            $table->string('address')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

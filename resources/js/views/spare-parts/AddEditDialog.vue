@@ -4,8 +4,8 @@
             <v-card>
                 <v-card-title>Finished good info</v-card-title>
                 <v-card-text>
-                    <vuetify-autocomplete url="/api/autocomplete/finished-goods" label="Search model, description ..." ref="serach" @select="selectProfile" />
-                    <v-text-field v-model="formData.model" :error-messages="errors.get('model')" outline label="Model"></v-text-field>
+                    <vuetify-autocomplete url="/api/autocomplete/spare-parts" label="Search part number, description ..." ref="serach" @select="selectProfile" />
+                    <v-text-field v-model="formData.partNumber" :error-messages="errors.get('partNumber')" outline label="Part number"></v-text-field>
                     <v-text-field v-model="formData.description" :error-messages="errors.get('description')" outline label="Description"></v-text-field>
                     <v-text-field v-model="formData.specs" :error-messages="errors.get('specs')" outline label="Specs"></v-text-field>
                     <v-text-field v-model="formData.supplier" :error-messages="errors.get('supplier')" outline label="Supplier"></v-text-field>
@@ -25,13 +25,13 @@
 <script>
 export default {
     props: [
-        'value', 'finishedGood'
+        'value', 'sparePart'
     ],
     data() {
         return {
             mode: 'insert',
             formData: {
-                model: null,
+                partNumber: null,
                 description: null,
                 specs: null,
                 supplier: null,
@@ -46,19 +46,19 @@ export default {
             this.$emit('input', false);
         },
         submit() {
-            this.$store.dispatch(`finishedGood/${this.mode}FinishedGood`, {
-                serialNumber: this.finishedGood ? this.finishedGood.serial_number : null,
+            this.$store.dispatch(`sparePart/${this.mode}SparePart`, {
+                serialNumber: this.sparePart ? this.sparePart.serial_number : null,
                 formData: this.formData
             }).then((res, rej) => {
                 this.close();
                 this.$emit('save', {
-                    finishedGood: res.data.finishedGood,
+                    sparePart: res.data.sparePart,
                     mode: this.mode
                 });
             });
         },
         selectProfile(data) {
-            this.formData.model = data.model;
+            this.formData.partNumber = data.partNumber;
             this.formData.description = data.description;
             this.formData.specs = data.specs;
             this.formData.supplier = data.supplier;
@@ -69,26 +69,26 @@ export default {
     },
     computed: {
         errors() {
-            return this.$store.getters['finishedGood/getErrors'];
+            return this.$store.getters['sparePart/getErrors'];
         },
         saving() {
-            return this.$store.getters['finishedGood/isSaving'];
+            return this.$store.getters['sparePart/isSaving'];
         }
     },
     watch: {
         value(val) {
-            if(val && this.finishedGood) {
+            if(val && this.sparePart) {
                 this.mode = 'update';
-                this.formData.model = this.finishedGood.model;
-                this.formData.description = this.finishedGood.description;
-                this.formData.specs = this.finishedGood.specs;
-                this.formData.supplier = this.finishedGood.supplier;
-                this.formData.serialNumber = this.finishedGood.serial_number;
-                this.formData.warehouse = this.finishedGood.warehouse;
-                this.formData.currentLocation = this.finishedGood.current_location;
+                this.formData.partNumber = this.sparePart.part_number;
+                this.formData.description = this.sparePart.description;
+                this.formData.specs = this.sparePart.specs;
+                this.formData.supplier = this.sparePart.supplier;
+                this.formData.serialNumber = this.sparePart.serial_number;
+                this.formData.warehouse = this.sparePart.warehouse;
+                this.formData.currentLocation = this.sparePart.current_location;
             } else {
                 this.mode = 'insert';
-                this.formData.model = null;
+                this.formData.partNumber = null;
                 this.formData.description = null;
                 this.formData.specs = null;
                 this.formData.supplier = null;
@@ -100,7 +100,7 @@ export default {
                 this.$refs.serach.$el.querySelector('input').select();
             }, 500);
         },
-        finishedGood(val) {
+        sparePart(val) {
             if(!!val) {
                 this.mode = 'update';
             } else {

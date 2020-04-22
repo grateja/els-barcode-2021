@@ -17,7 +17,7 @@ class CreateReservedSpareParts extends Migration
             $table->uuid('spare_part_item_id');
             $table->uuid('reservation_id');
 
-            //$table->foreign('spare_part_item_id')->references('id')->on('spare_part_items')->onDelete('CASCADE')->onUpdate('CASCADE');
+            $table->foreign('spare_part_item_id')->references('id')->on('spare_part_items')->onDelete('CASCADE')->onUpdate('CASCADE');
             $table->foreign('reservation_id')->references('id')->on('reservations')->onDelete('CASCADE')->onUpdate('CASCADE');
         });
     }

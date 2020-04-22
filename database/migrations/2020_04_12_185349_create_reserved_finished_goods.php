@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFinishedGoodItemReservations extends Migration
+class CreateReservedFinishedGoods extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFinishedGoodItemReservations extends Migration
      */
     public function up()
     {
-        Schema::create('finished_good_item_reservations', function (Blueprint $table) {
+        Schema::create('reserved_finished_goods', function (Blueprint $table) {
             $table->uuid('finished_good_item_id');
             $table->uuid('reservation_id');
 
@@ -29,6 +29,6 @@ class CreateFinishedGoodItemReservations extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('finished_good_item_reservations');
+        Schema::dropIfExists('reserved_finished_goods');
     }
 }
