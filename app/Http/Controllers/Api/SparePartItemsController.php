@@ -17,7 +17,8 @@ class SparePartItemsController extends Controller
             ->join('spare_parts', 'spare_parts.id', '=', 'spare_part_items.spare_part_id')
             ->selectRaw('`spare_part_items`.`id` AS serial_number, `spare_parts`.`id` AS part_number, description, specs, warehouse, current_location, supplier')
             ->where(function($query) use ($request){
-                $query->where(DB::raw('spare_part_items.id'), 'like', "%$request->keyword%");
+                $query->where(DB::raw('spare_part_items.id'), 'like', "%$request->keyword%")
+                    ->orWhere(DB::raw('spare_parts.description'), 'like', "%$request->keyword%");
             });
 
         return response()->json([

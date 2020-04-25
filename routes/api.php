@@ -81,6 +81,60 @@ Route::group(['prefix' => 'incoming-reports', 'middleware' => 'auth:api'], funct
     });
 });
 
+// /api/outgoing-reports
+Route::group(['prefix' => 'outgoing-reports', 'middleware' => 'auth:api'], function () {
+    // /api/outgoing-reports/finished-goods
+    Route::group(['prefix' => 'finished-goods'], function () {
+        // /api/outgoing-reports/finished-goods/{reportId}
+        Route::get('{reportId}', 'Api\OutgoingFinishedGoodsController@show');
+
+        // /api/outgoing-reports/finished-goods
+        Route::get('/', 'Api\OutgoingFinishedGoodsController@index');
+
+        // /api/outgoing-reports/finished-goods/{reportId}/delete
+        Route::post('{reportId}/delete', 'Api\OutgoingFinishedGoodsController@delete');
+
+        // /api/outgoing-reports/finished-goods/create
+        Route::post('create', 'Api\OutgoingFinishedGoodsController@create');
+
+        // /api/outgoing-reports/finished-goods/{reportId}/update
+        Route::post('{reportId}/update', 'Api\OutgoingFinishedGoodsController@update');
+
+        // /api/outgoing-reports/finished-goods/{reportId}/view-items
+        Route::get('{reportId}/view-items', 'Api\OutgoingFinishedGoodReportItemsController@index');
+
+        // /api/outgoing-reports/finished-goods/{reportId}/add-items
+        Route::post('{reportId}/add-items', 'Api\OutgoingFinishedGoodReportItemsController@addItems');
+
+        // /api/outgoing-reports/finished-goods/{reportId}/remove-items
+        Route::post('{reportId}/remove-items', 'Api\OutgoingFinishedGoodReportItemsController@removeItems');
+    });
+
+    // /api/outgoing-reports/spare-parts
+    Route::group(['prefix' => 'spare-parts'], function () {
+        // /api/outgoing-reports/spare-parts
+        Route::get('/', 'Api\OutgoingSparePartsController@index');
+
+        // /api/outgoing-reports/spare-parts/{reportId}/delete
+        Route::post('{reportId}/delete', 'Api\OutgoingSparePartsController@delete');
+
+        // /api/outgoing-reports/spare-parts/create
+        Route::post('create', 'Api\OutgoingSparePartsController@create');
+
+        // /api/outgoing-reports/spare-parts/{reportId}/update
+        Route::post('{reportId}/update', 'Api\OutgoingSparePartsController@update');
+
+        // /api/outgoing-reports/spare-parts/{reportId}/view-items
+        Route::get('{reportId}/view-items', 'Api\OutgoingSparePartReportItemsController@index');
+
+        // /api/outgoing-reports/spare-parts/{reportId}/add-items
+        Route::post('{reportId}/add-items', 'Api\OutgoingSparePartReportItemsController@addItems');
+
+        // /api/outgoing-reports/spare-parts/{reportId}/remove-items
+        Route::post('{reportId}/remove-items', 'Api\OutgoingSparePartReportItemsController@removeItems');
+    });
+});
+
 // /api/reservations
 Route::group(['prefix' => 'reservations', 'middleware' => 'auth:api'], function () {
     // /api/reservations

@@ -17,6 +17,9 @@ import reservation from './modules/reservation.js';
 import client from './modules/client.js';
 import subdealer from './modules/subdealer.js';
 
+import outgoingFinishedGoodReport from './modules/outgoingFinishedGoodReport.js';
+import outgoingSparePartReport from './modules/outgoingSparePartReport.js';
+
 export default new  Vuex.Store({
     state: {
         currentUser: null,
@@ -75,6 +78,8 @@ export default new  Vuex.Store({
         sparePart,
         reservation,
         client,
-        subdealer
+        subdealer,
+        outgoingFinishedGoodReport,
+        outgoingSparePartReport
     }
 });

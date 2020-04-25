@@ -23,6 +23,20 @@ const routes = [
         ]
     },
     {
+        path: '/outgoing-reports',
+        component: require('./views/outgoing-reports/Index.vue').default,
+        children: [
+            {
+                path: 'finished-goods',
+                component: require('./views/outgoing-reports/finished-goods/Index.vue').default,
+            },
+            {
+                path: 'spare-parts',
+                component: require('./views/outgoing-reports/spare-parts/Index.vue').default,
+            }
+        ]
+    },
+    {
         path: '/reservations',
         component: require('./views/reservations/Index.vue').default
     }

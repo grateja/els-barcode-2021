@@ -22,7 +22,7 @@
                             <v-divider class="my-4"></v-divider>
 
                             <template v-if="!!subdealer">
-                                <v-text-field label="Client" :value="subdealer.subdealer_name" v-if="subdealer" readonly clearable @click:clear="subdealer = null"></v-text-field>
+                                <v-text-field label="Subdealer" :value="subdealer.subdealer_name" v-if="subdealer" readonly clearable @click:clear="subdealer = null"></v-text-field>
                             </template>
                             <template v-else>
                                 <v-btn round small :outline="!subdealer" class="ml-0 mb-0" @click="browseSubdealer = true" :color="!!subdealer? 'success' : ''">
