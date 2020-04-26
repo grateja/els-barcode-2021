@@ -16,12 +16,20 @@ class SparePartItem extends Model
         'id', 'spare_part_id', 'client_id', 'subdealer_id', 'warehouse', 'status', 'current_location',
     ];
 
+    public $appends = [
+        'serial_number',
+    ];
+
     public function getRedirectRoute() {
         return 'scan.spare-parts';
     }
 
     public function getBarcodeLabel() {
         return $this->sparePart->id . ' - ' . $this->sparePart->description;
+    }
+
+    public function getSerialNumberAttribute() {
+        return $this->id;
     }
 
     public static function findAll($id) {

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\UsesOrders;
 use App\Traits\UsesSerialProfiler;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SparePart extends Model
 {
-    use UsesUuid, SoftDeletes, UsesSerialProfiler;
+    use UsesUuid, SoftDeletes, UsesSerialProfiler, UsesOrders;
 
     protected $fillable = [
         'id', 'description', 'specs', 'supplier',
@@ -21,6 +22,14 @@ class SparePart extends Model
 
     public function getBarcodeLabel() {
         return $this->id . ' - ' . $this->description;
+    }
+
+    static function orders() {
+        return [
+            'part_number' => 'id',
+            'description' => 'description',
+            'specs' => 'specs',
+        ];
     }
 
     public function sparePartItems() {

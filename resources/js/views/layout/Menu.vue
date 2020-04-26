@@ -141,7 +141,7 @@ export default {
                     icon: 'developer_board',
                     roles: ['admin', 'developer'],
                     color: '#a7a1e6',
-                    to: '/spare-parts'
+                    to: '/spare-parts/profiles'
                 },
                 {
                     text: 'Fixed assets',

@@ -42,6 +42,30 @@ const actions = {
             return Promise.reject(err);
         });
     },
+    insertSerial(context, data) {
+        context.commit('setSavingStatus', true);
+        context.commit('clearErrors');
+        return axios.post(`/api/spare-parts/items/${data.partNumber}/insert-serial`, data.formData).then((res, rej) => {
+            context.commit('setSavingStatus', false);
+            return res;
+        }).catch(err => {
+            context.commit('setErrors', err.response.data.errors);
+            context.commit('setSavingStatus', false);
+            return Promise.reject(err);
+        });
+    },
+    updateSerial(context, data) {
+        context.commit('setSavingStatus', true);
+        context.commit('clearErrors');
+        return axios.post(`/api/spare-parts/items/${data.serialNumber}/update-serial`, data.formData).then((res, rej) => {
+            context.commit('setSavingStatus', false);
+            return res;
+        }).catch(err => {
+            context.commit('setErrors', err.response.data.errors);
+            context.commit('setSavingStatus', false);
+            return Promise.reject(err);
+        });
+    },
     deleteSparePart(context, serialNumber) {
         return axios.post(`/api/spare-parts/items/${serialNumber}/delete`);
     }

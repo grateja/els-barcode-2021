@@ -53,6 +53,20 @@ const routes = [
                 component: require('./views/profiles/finished-goods/BySerialNumbers.vue').default
             }
         ]
+    },
+    {
+        path: '/spare-parts',
+        component: require('./views/profiles/spare-parts/Index.vue').default,
+        children: [
+            {
+                path: 'profiles',
+                component: require('./views/profiles/spare-parts/ByPartnumbers.vue').default
+            },
+            {
+                path: 'items',
+                component: require('./views/profiles/spare-parts/BySerialNumbers.vue').default
+            }
+        ]
     }
 ];
 

@@ -24,10 +24,7 @@
 
         <v-data-table :headers="headers" :items="items" :loading="loading" hide-actions>
             <template v-slot:items="props">
-                <td>{{props.index + 1}}</td>
-                <td>
-                    <v-checkbox :input-value="props.selected"></v-checkbox>
-                </td>
+                <td>{{ props.index + 1 }}</td>
                 <td>{{ props.item.id }}</td>
                 <td>{{ props.item.description }}</td>
                 <td>{{ props.item.specs }}</td>

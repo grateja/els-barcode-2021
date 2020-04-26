@@ -18,4 +18,8 @@ class SerialNumberProfiler extends Model
     public static function findByCode($id) {
         return static::withTrashed()->find($id);
     }
+
+    public function deleteItem() {
+        DB::table($this->base_table)->where('id', $this->id)->delete();
+    }
 }

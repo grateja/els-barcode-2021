@@ -21,6 +21,7 @@ import outgoingFinishedGoodReport from './modules/outgoingFinishedGoodReport.js'
 import outgoingSparePartReport from './modules/outgoingSparePartReport.js';
 
 import finishedGoodProfile from './modules/finishedGoodProfile.js';
+import sparePartProfile from './modules/sparePartProfile.js';
 
 export default new  Vuex.Store({
     state: {
@@ -83,6 +84,7 @@ export default new  Vuex.Store({
         subdealer,
         outgoingFinishedGoodReport,
         outgoingSparePartReport,
-        finishedGoodProfile
+        finishedGoodProfile,
+        sparePartProfile
     }
 });

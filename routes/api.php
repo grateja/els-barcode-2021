@@ -189,6 +189,7 @@ Route::group(['prefix' => 'finished-goods', 'middleware' => 'auth:api'], functio
         // /api/finished-goods/profiles/{id}/delete
         Route::post('{id}/delete', 'Api\FinishedGoodsController@delete');
     });
+
     // /api/finished-goods/items
     Route::group(['prefix' => 'items'], function () {
         // /api/finished-goods/items/{model}
@@ -214,15 +215,40 @@ Route::group(['prefix' => 'finished-goods', 'middleware' => 'auth:api'], functio
 
 // /api/spare-parts
 Route::group(['prefix' => 'spare-parts', 'middleware' => 'auth:api'], function () {
+    // /api/spare-parts/profiles
+    Route::group(['prefix' => 'profiles'], function () {
+        Route::get('/', 'Api\SparePartsController@index');
+
+        // /api/spare-parts/profiles/create
+        Route::post('create', 'Api\SparePartsController@create');
+
+        // /api/spare-parts/profiles/{id}/update
+        Route::post('{id}/update', 'Api\SparePartsController@update');
+
+        // /api/spare-parts/profiles/{id}/delete
+        Route::post('{id}/delete', 'Api\SparePartsController@delete');
+    });
+
     // /api/spare-parts/items
     Route::group(['prefix' => 'items'], function () {
-        // /api/spare-parts/items/
-        Route::get('/', 'Api\SparePartItemsController@index');
+        // /api/spare-parts/items/{partNumber?}
+        Route::get('{partNumber?}', 'Api\SparePartItemsController@index');
 
         // /api/spare-parts/items/create
         Route::post('create', 'Api\SparePartItemsController@create');
-    });
 
+        // /api/finished-goods/items/{serialNumber}/update
+        Route::post('{serialNumber}/update', 'Api\SparePartItemsController@update');
+
+        // /api/finished-goods/items/{model}/insert-serial
+        Route::post('{model}/insert-serial', 'Api\SparePartItemsController@insertSerial');
+
+        // /api/finished-goods/items/{serialNumber}/update-serial
+        Route::post('{serialNumber}/update-serial', 'Api\SparePartItemsController@updateSerial');
+
+        // /api/finished-goods/items/{serialNumber}/delete
+        Route::post('{serialNumber}/delete', 'Api\SparePartItemsController@delete');
+    });
 });
 
 // /api/fixed-assets
