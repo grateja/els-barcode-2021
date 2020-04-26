@@ -18,10 +18,10 @@ const mutations = {
 };
 
 const actions = {
-    insertFinishedGood(context, data) {
+    insertFinishedGoodProfile(context, data) {
         context.commit('setSavingStatus', true);
         context.commit('clearErrors');
-        return axios.post('/api/finished-goods/items/create', data.formData).then((res, rej) => {
+        return axios.post('/api/finished-goods/profiles/create', data.formData).then((res, rej) => {
             context.commit('setSavingStatus', false);
             return res;
         }).catch(err => {
@@ -30,10 +30,10 @@ const actions = {
             return Promise.reject(err);
         });
     },
-    insertSerial(context, data) {
+    updateFinishedGoodProfile(context, data) {
         context.commit('setSavingStatus', true);
         context.commit('clearErrors');
-        return axios.post(`/api/finished-goods/items/${data.model}/insert-serial`, data.formData).then((res, rej) => {
+        return axios.post(`/api/finished-goods/profiles/${data.id}/update`, data.formData).then((res, rej) => {
             context.commit('setSavingStatus', false);
             return res;
         }).catch(err => {
@@ -42,20 +42,8 @@ const actions = {
             return Promise.reject(err);
         });
     },
-    updateSerial(context, data) {
-        context.commit('setSavingStatus', true);
-        context.commit('clearErrors');
-        return axios.post(`/api/finished-goods/items/${data.serialNumber}/update-serial`, data.formData).then((res, rej) => {
-            context.commit('setSavingStatus', false);
-            return res;
-        }).catch(err => {
-            context.commit('setErrors', err.response.data.errors);
-            context.commit('setSavingStatus', false);
-            return Promise.reject(err);
-        });
-    },
-    deleteFinishedGood(context, serialNumber) {
-        return axios.post(`/api/finished-goods/items/${serialNumber}/delete`);
+    deleteFinishedGoodProfile(context, id) {
+        return axios.post(`/api/finished-goods/profiles/${id}/delete`);
     }
 };
 

@@ -48,28 +48,30 @@
                     </v-flex>
                     <v-flex xs12 sm7 md8>
                         <v-card height="100%">
-                            <v-data-table v-model="selectedItems" item-key="serial_number" select-all :items="items" :headers="headers" hide-actions :loading="loading">
-                                <template v-slot:items="props">
-                                    <tr :active="props.selected" @click="props.selected = !props.selected">
-                                        <td>
-                                            <v-checkbox :input-value="props.selected"></v-checkbox>
-                                        </td>
-                                        <td>{{props.index + 1}}</td>
-                                        <td>{{ props.item.serial_number }}</td>
-                                        <td>{{ props.item.model }}</td>
-                                        <td>{{ props.item.description }}</td>
-                                        <td>{{ props.item.specs }}</td>
-                                        <td>{{ props.item.supplier }}</td>
-                                    </tr>
-                                </template>
-                            </v-data-table>
+                            <div style="overflow-y: auto; max-height: 630px" ref="card" id="card">
+                                <v-data-table v-model="selectedItems" item-key="serial_number" select-all :items="items" :headers="headers" :loading="loading">
+                                    <template v-slot:items="props">
+                                        <tr :active="props.selected" @click="props.selected = !props.selected">
+                                            <td>
+                                                <v-checkbox :input-value="props.selected"></v-checkbox>
+                                            </td>
+                                            <td>{{props.index + 1}}</td>
+                                            <td>{{ props.item.serial_number }}</td>
+                                            <td>{{ props.item.model }}</td>
+                                            <td>{{ props.item.description }}</td>
+                                            <td>{{ props.item.specs }}</td>
+                                            <td>{{ props.item.supplier }}</td>
+                                        </tr>
+                                    </template>
+                                </v-data-table>
+                            </div>
                             <v-card-actions>
                                 <v-btn round color="success" small @click="addItem">
                                     <v-icon left>add</v-icon>
                                     add item
                                 </v-btn>
 
-                                <v-btn v-if="selectedItems && selectedItems.length" round small>
+                                <v-btn v-if="selectedItems && selectedItems.length" round small @click="print" :loading="printing">
                                     <v-icon left>print</v-icon>
                                     Print ({{selectedItems.length}})
                                 </v-btn>
@@ -101,6 +103,7 @@ export default {
     ],
     data() {
         return {
+            printing: false,
             loading: false,
             openAddItem: false,
             removingItems: false,
@@ -172,6 +175,17 @@ export default {
                     this.removingItems = false;
                 });
             }
+        },
+        print() {
+            this.printing = true;
+            let serialNumbers = this.selectedItems.map(i => i.serial_number);
+            this.$store.dispatch('printer/printSerialNumbers', {
+                params: {
+                    serialNumbers
+                }
+            }).finally(() => {
+                this.printing = false;
+            })
         }
     },
     watch: {

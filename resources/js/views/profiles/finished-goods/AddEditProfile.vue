@@ -4,14 +4,10 @@
             <v-card>
                 <v-card-title>Finished good info</v-card-title>
                 <v-card-text>
-                    <vuetify-autocomplete url="/api/autocomplete/finished-goods" label="Search model, description ..." ref="serach" @select="selectProfile" v-model="model" />
-                    <v-text-field v-model="formData.model" :error-messages="errors.get('model')" outline label="Model"></v-text-field>
+                    <v-text-field v-model="formData.model" :error-messages="errors.get('model')" outline label="Model" ref="model"></v-text-field>
                     <v-text-field v-model="formData.description" :error-messages="errors.get('description')" outline label="Description"></v-text-field>
                     <v-text-field v-model="formData.specs" :error-messages="errors.get('specs')" outline label="Specs"></v-text-field>
                     <v-text-field v-model="formData.supplier" :error-messages="errors.get('supplier')" outline label="Supplier"></v-text-field>
-                    <v-text-field v-model="formData.serialNumber" :error-messages="errors.get('serialNumber')" outline label="Serial Number" ref="serialNumber"></v-text-field>
-                    <v-text-field v-model="formData.warehouse" :error-messages="errors.get('warehouse')" outline label="Warehouse"></v-text-field>
-                    <v-text-field v-model="formData.currentLocation" :error-messages="errors.get('currentLocation')" outline label="Current location"></v-text-field>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn class="primary" type="submit" round :loading="saving">Save</v-btn>
@@ -25,12 +21,11 @@
 <script>
 export default {
     props: [
-        'value', 'finishedGood'
+        'value', 'finishedGoodProfile'
     ],
     data() {
         return {
             mode: 'insert',
-            model: null,
             formData: {
                 model: null,
                 description: null,
@@ -47,46 +42,35 @@ export default {
             this.$emit('input', false);
         },
         submit() {
-            this.$store.dispatch(`finishedGood/${this.mode}FinishedGood`, {
-                serialNumber: this.finishedGood ? this.finishedGood.serial_number : null,
+            this.$store.dispatch(`finishedGoodProfile/${this.mode}FinishedGoodProfile`, {
+                id: this.finishedGoodProfile ? this.finishedGoodProfile.id : null,
                 formData: this.formData
             }).then((res, rej) => {
                 this.close();
                 this.$emit('save', {
-                    finishedGood: res.data.finishedGood,
+                    finishedGoodProfile: res.data.finishedGood,
                     mode: this.mode
                 });
             });
-        },
-        selectProfile(data) {
-            this.formData.model = data.model;
-            this.formData.description = data.description;
-            this.formData.specs = data.specs;
-            this.formData.supplier = data.supplier;
-            setTimeout(() => {
-                this.$refs.serialNumber.$el.querySelector('input').select();
-            }, 500);
         }
     },
     computed: {
         errors() {
-            return this.$store.getters['finishedGood/getErrors'];
+            return this.$store.getters['finishedGoodProfile/getErrors'];
         },
         saving() {
-            return this.$store.getters['finishedGood/isSaving'];
+            return this.$store.getters['finishedGoodProfile/isSaving'];
         }
     },
     watch: {
         value(val) {
-            if(val && this.finishedGood) {
+            if(val && this.finishedGoodProfile) {
                 this.mode = 'update';
-                this.formData.model = this.finishedGood.model;
-                this.formData.description = this.finishedGood.description;
-                this.formData.specs = this.finishedGood.specs;
-                this.formData.supplier = this.finishedGood.supplier;
-                this.formData.serialNumber = this.finishedGood.serial_number;
-                this.formData.warehouse = this.finishedGood.warehouse;
-                this.formData.currentLocation = this.finishedGood.current_location;
+                this.formData.model = this.finishedGoodProfile.id;
+                this.formData.description = this.finishedGoodProfile.description;
+                this.formData.specs = this.finishedGoodProfile.specs;
+                this.formData.supplier = this.finishedGoodProfile.supplier;
+                this.formData.serialNumber = this.finishedGoodProfile.serial_number;
             } else {
                 this.mode = 'insert';
                 this.formData.model = null;
@@ -94,15 +78,12 @@ export default {
                 this.formData.specs = null;
                 this.formData.supplier = null;
                 this.formData.serialNumber = null;
-                this.formData.warehouse = null;
-                this.formData.currentLocation = null;
-                this.model = null;
             }
             setTimeout(() => {
-                this.$refs.serach.$el.querySelector('input').select();
+                this.$refs.model.$el.querySelector('input').select();
             }, 500);
         },
-        finishedGood(val) {
+        finishedGoodProfile(val) {
             if(!!val) {
                 this.mode = 'update';
             } else {

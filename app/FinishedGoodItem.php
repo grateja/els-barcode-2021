@@ -16,8 +16,20 @@ class FinishedGoodItem extends Model
         'id', 'finished_good_id', 'client_id', 'subdealer_id', 'warehouse', 'status', 'current_location',
     ];
 
+    public $appends = [
+        'serial_number',
+    ];
+
     public function getRedirectRoute() {
         return 'scan.finished-goods';
+    }
+
+    public function getBarcodeLabel() {
+        return $this->finishedGood->id . ' - ' . $this->finishedGood->description;
+    }
+
+    public function getSerialNumberAttribute() {
+        return $this->id;
     }
 
     public function getDeletedAtAttribute($value) {

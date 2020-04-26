@@ -11,6 +11,7 @@ trait UsesSerialProfiler {
                 'id' => $model->id,
                 'base_table' => $model->getTable(),
                 'redirect' => $model->getRedirectRoute(),
+                'barcode_label' => $model->getBarcodeLabel(),
             ]);
         });
 
@@ -29,6 +30,7 @@ trait UsesSerialProfiler {
             if($profiler) {
                 $profiler->update([
                     'id' => $model->id,
+                    'barcode_label' => $model->getBarcodeLabel(),
                 ]);
             }
         });

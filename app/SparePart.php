@@ -19,6 +19,10 @@ class SparePart extends Model
         return 'scan.spare-parts-profile';
     }
 
+    public function getBarcodeLabel() {
+        return $this->id . ' - ' . $this->description;
+    }
+
     public function sparePartItems() {
         return $this->hasMany('App\SparePartItem');
     }

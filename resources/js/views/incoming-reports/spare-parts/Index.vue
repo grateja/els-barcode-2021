@@ -42,6 +42,11 @@
                     </v-btn>
                 </td>
             </template>
+            <template slot="footer">
+                <td colspan="100%" class="caption grey--text font-italic text-xs-center">
+                    <strong>Showing {{items.length}} out of {{total}} result</strong>
+                </td>
+            </template>
         </v-data-table>
         <v-btn block @click="loadMore" :loading="loading">Load more</v-btn>
         <report-dialog v-model="openReport" :report="activeReport" @save="updateList" />
@@ -60,6 +65,7 @@ export default {
     },
     data() {
         return {
+            total: 0,
             keyword: null,
             page: 1,
             date: null,
@@ -136,6 +142,7 @@ export default {
                         });
                     }, 10);
                 }
+                this.total = res.data.result.total;
             }).finally(() => {
                 this.loading = false;
             });

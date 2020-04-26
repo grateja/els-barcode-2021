@@ -20,6 +20,8 @@ import subdealer from './modules/subdealer.js';
 import outgoingFinishedGoodReport from './modules/outgoingFinishedGoodReport.js';
 import outgoingSparePartReport from './modules/outgoingSparePartReport.js';
 
+import finishedGoodProfile from './modules/finishedGoodProfile.js';
+
 export default new  Vuex.Store({
     state: {
         currentUser: null,
@@ -80,6 +82,7 @@ export default new  Vuex.Store({
         client,
         subdealer,
         outgoingFinishedGoodReport,
-        outgoingSparePartReport
+        outgoingSparePartReport,
+        finishedGoodProfile
     }
 });

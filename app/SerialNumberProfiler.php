@@ -12,7 +12,7 @@ class SerialNumberProfiler extends Model
     use UsesUuid, SoftDeletes;
 
     protected $fillable = [
-        'id', 'base_table', 'redirect',
+        'id', 'base_table', 'redirect', 'barcode_label',
     ];
 
     public static function findByCode($id) {

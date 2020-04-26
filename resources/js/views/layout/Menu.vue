@@ -134,7 +134,7 @@ export default {
                     icon: 'local_laundry_service',
                     roles: ['admin', 'developer'],
                     color: '#a7a1e6',
-                    to: '/finished-goods'
+                    to: '/finished-goods/profiles'
                 },
                 {
                     text: 'Spare parts',

@@ -23,6 +23,10 @@ class FixedAsset extends Model
         return 'scan.fixed-assets';
     }
 
+    public function getBarcodeLabel() {
+        return $this->description;
+    }
+
     public function tags() {
         return $this->belongsToMany('App\Tag', 'fixed_asset_tags', 'fixed_asset_id', 'tag_id');
     }

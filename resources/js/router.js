@@ -39,6 +39,16 @@ const routes = [
     {
         path: '/reservations',
         component: require('./views/reservations/Index.vue').default
+    },
+    {
+        path: '/finished-goods',
+        component: require('./views/profiles/finished-goods/Index.vue').default,
+        children: [
+            {
+                path: 'profiles',
+                component: require('./views/profiles/finished-goods/ByModels.vue').default
+            }
+        ]
     }
 ];
 

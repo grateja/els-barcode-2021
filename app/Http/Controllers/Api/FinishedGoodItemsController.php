@@ -12,13 +12,17 @@ use Illuminate\Support\Facades\DB;
 
 class FinishedGoodItemsController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request, $model = null) {
         $result = DB::table('finished_good_items')
             ->join('finished_goods', 'finished_goods.id', '=', 'finished_good_items.finished_good_id')
             ->selectRaw('`finished_good_items`.`id` AS serial_number, `finished_goods`.`id` AS model, description, specs, warehouse, current_location, supplier')
             ->where(function($query) use ($request){
                 $query->where(DB::raw('finished_good_items.id'), 'like', "%$request->keyword%");
             });
+
+        if($model) {
+            $result = $result->where('finished_good_id', $model);
+        }
 
         return response()->json([
             'result' => $result->paginate(10),
@@ -94,5 +98,54 @@ class FinishedGoodItemsController extends Controller
             }
         });
 
+    }
+
+    public function insertSerial(Request $request, $model) {
+        $rules = [
+            'serialNumber' => 'required|unique:finished_good_items,id',
+        ];
+
+        if($request->validate($rules)) {
+            return DB::transaction(function () use ($request, $model) {
+                $finishedGoodItem = FinishedGoodItem::create([
+                    'finished_good_id' => $model,
+                    'id' => $request->serialNumber,
+                    'warehouse' => $request->warehouse,
+                    'current_location' => $request->currentLocation,
+                ]);
+
+                return response()->json([
+                    'finishedGood' => $finishedGoodItem,
+                ]);
+            });
+        }
+    }
+
+    public function updateSerial(Request $request, $serialNumber) {
+        $finishedGoodItem = FinishedGoodItem::findOrFail($serialNumber);
+
+        if($finishedGoodItem->id != $request->serialNumber) {
+            $rules = [
+                'serialNumber' => 'required|unique:finished_good_items,id',
+            ];
+        } else {
+            $rules = [
+                'serialNumber' => 'required',
+            ];
+        }
+
+        if($request->validate($rules)) {
+            return DB::transaction(function () use ($request, $finishedGoodItem) {
+                $finishedGoodItem->update([
+                    'id' => $request->serialNumber,
+                    'warehouse' => $request->warehouse,
+                    'current_location' => $request->currentLocation,
+                ]);
+
+                return response()->json([
+                    'finishedGood' => $finishedGoodItem,
+                ]);
+            });
+        }
     }
 }

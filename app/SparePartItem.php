@@ -20,6 +20,10 @@ class SparePartItem extends Model
         return 'scan.spare-parts';
     }
 
+    public function getBarcodeLabel() {
+        return $this->sparePart->id . ' - ' . $this->sparePart->description;
+    }
+
     public static function findAll($id) {
         return static::with('sparePart', 'subdealer', 'client', 'activityLogs')
             ->withTrashed()

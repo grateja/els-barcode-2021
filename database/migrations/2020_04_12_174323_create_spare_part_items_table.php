@@ -21,7 +21,7 @@ class CreateSparePartItemsTable extends Migration
             $table->uuid('client_id')->nullable()->comment('CURRENT CLIENT (IF ANY)');
             $table->uuid('subdealer_id')->nullable()->comment('CURRENT SUBDEALER (IF ANY)');
             $table->string('warehouse')->comment('GOLDLAND_TOWER, WH1, WH2, WH3, WH4, WH5');
-            $table->string('status')->comment('RESERVED, ISSUED, IN_INVENTORY');
+            $table->string('status')->default('IN_INVENTORY')->comment('RESERVED, ISSUED, IN_INVENTORY');
             $table->string('current_location')->nullable()->comment('specific_location:BAY_1, BAY_2...');
 
             $table->timestamps();

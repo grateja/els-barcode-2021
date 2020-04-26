@@ -176,13 +176,32 @@ Route::group(['prefix' => 'reservations', 'middleware' => 'auth:api'], function 
 
 // /api/finished-goods
 Route::group(['prefix' => 'finished-goods', 'middleware' => 'auth:api'], function () {
+    // /api/finished-goods/profiles
+    Route::group(['prefix' => 'profiles'], function () {
+        Route::get('/', 'Api\FinishedGoodsController@index');
+
+        // /api/finished-goods/profiles/create
+        Route::post('create', 'Api\FinishedGoodsController@create');
+
+        // /api/finished-goods/profiles/{id}/update
+        Route::post('{id}/update', 'Api\FinishedGoodsController@update');
+
+        // /api/finished-goods/profiles/{id}/delete
+        Route::post('{id}/delete', 'Api\FinishedGoodsController@delete');
+    });
     // /api/finished-goods/items
     Route::group(['prefix' => 'items'], function () {
-        // /api/finished-goods/items/
-        Route::get('/', 'Api\FinishedGoodItemsController@index');
+        // /api/finished-goods/items/{model}
+        Route::get('{model?}', 'Api\FinishedGoodItemsController@index');
 
         // /api/finished-goods/items/create
         Route::post('create', 'Api\FinishedGoodItemsController@create');
+
+        // /api/finished-goods/items/{model}/insert-serial
+        Route::post('{model}/insert-serial', 'Api\FinishedGoodItemsController@insertSerial');
+
+        // /api/finished-goods/items/{serialNumber}/update-serial
+        Route::post('{serialNumber}/update-serial', 'Api\FinishedGoodItemsController@updateSerial');
     });
 
 });
@@ -222,6 +241,11 @@ Route::group(['prefix' => 'subdealers', 'middleware' => 'auth:api'], function ()
     Route::post('create', 'Api\SubdealersController@create');
 });
 
+// /api/printer
+Route::group(['prefix' => 'printer'], function () {
+    // /api/printer/serial-numbers
+    Route::get('serial-numbers', 'PrinterController@serialNumbers');
+});
 
 
 

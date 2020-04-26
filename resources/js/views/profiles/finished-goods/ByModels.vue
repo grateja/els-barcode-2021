@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-divider class="my-3"></v-divider>
-        <v-btn class="ml-0" round color="success" @click="addReport">Add new report</v-btn>
+        <v-btn class="ml-0" round color="success" @click="addItem">Add new report</v-btn>
+
         <v-card>
             <v-card-text>
                 <v-layout>
@@ -9,10 +9,10 @@
                         <v-text-field label="Specify date" v-model="date" type="date" append-icon="date" @change="filter" outline></v-text-field>
                     </v-flex>
                     <v-flex>
-                        <v-text-field class="ml-1" label="Search reference number" v-model="keyword" append-icon="search" @keyup="filter" outline></v-text-field>
+                        <v-text-field class="ml-1" label="Search model, description or specs" v-model="keyword" append-icon="search" @keyup="filter" outline></v-text-field>
                     </v-flex>
                     <v-flex shrink>
-                        <v-combobox class="ml-1" label="Sort by" v-model="sortBy" outline :items="['received_date', 'po_number', 'rr_number', 'pi_number']" @change="filter"></v-combobox>
+                        <v-combobox class="ml-1" label="Sort by" v-model="sortBy" outline :items="['description', 'model']" @change="filter"></v-combobox>
                     </v-flex>
                     <v-flex shrink>
                         <v-combobox class="ml-1" label="Order" v-model="orderBy" outline :items="['asc', 'desc']" @change="filter"></v-combobox>
@@ -25,11 +25,10 @@
         <v-data-table :headers="headers" :items="items" :loading="loading" hide-actions>
             <template v-slot:items="props">
                 <td>{{props.index + 1}}</td>
-                <td>{{ moment(props.item.received_date).format('YYYY, MMM DD') }}</td>
-                <td>{{ props.item.po_number }}</td>
-                <td>{{ props.item.rr_number }}</td>
-                <td>{{ props.item.pi_number }}</td>
-                <td>{{ props.item.truck_number }}</td>
+                <td>{{ props.item.id }}</td>
+                <td>{{ props.item.description }}</td>
+                <td>{{ props.item.specs }}</td>
+                <td>{{ props.item.supplier }}</td>
                 <td>
                     <v-btn icon small @click="viewItems(props.item)">
                         <v-icon small>list</v-icon>
@@ -49,18 +48,19 @@
             </template>
         </v-data-table>
         <v-btn block @click="loadMore" :loading="loading">Load more</v-btn>
-        <report-dialog v-model="openReport" :report="activeReport" @save="updateList" />
-        <items-dialog v-model="openItems" :report="activeReport" />
+
+        <add-edit-profile v-model="openAddEdit" :finishedGoodProfile="activeItem" @save="updateList" />
+        <items-dialog v-model="openItems" :finishedGood="activeItem" />
     </div>
 </template>
 
 <script>
-import ReportDialog from './ReportDialog.vue';
+import AddEditProfile from './AddEditProfile.vue';
 import ItemsDialog from './ItemsDialog.vue';
 
 export default {
     components: {
-        ReportDialog,
+        AddEditProfile,
         ItemsDialog
     },
     data() {
@@ -69,38 +69,34 @@ export default {
             keyword: null,
             page: 1,
             date: null,
-            sortBy: 'received_date',
+            sortBy: 'description',
             orderBy: 'desc',
             cancelSource: null,
             items: [],
             loading: false,
             reset: true,
-            openReport: false,
+            openAddEdit: false,
             openItems: false,
-            activeReport: null,
+            activeItem: null,
             headers: [
                 {
                     text: '',
                     sortable: false
                 },
                 {
-                    text: 'Date received',
+                    text: 'Model',
                     sortable: false
                 },
                 {
-                    text: 'PO Number',
+                    text: 'Description',
                     sortable: false
                 },
                 {
-                    text: 'RR Number',
+                    text: 'Specs',
                     sortable: false
                 },
                 {
-                    text: 'PI Number',
-                    sortable: false
-                },
-                {
-                    text: 'Truck',
+                    text: 'Supplier',
                     sortable: false
                 },
                 {
@@ -112,15 +108,15 @@ export default {
     },
     methods: {
         filter() {
-            this.page = 1;
             this.reset = true;
+            this.page = 1;
             this.load();
         },
         load() {
             this.cancelSearch();
             this.cancelSource = axios.CancelToken.source();
             this.loading = true;
-            axios.get('/api/incoming-reports/finished-goods', {
+            axios.get('/api/finished-goods/profiles', {
                 params: {
                     keyword: this.keyword,
                     page: this.page,
@@ -156,39 +152,39 @@ export default {
             this.page+= 1;
             this.load();
         },
-        addReport() {
-            this.activeReport = null;
-            this.openReport = true;
+        addItem() {
+            this.activeItem = null;
+            this.openAddEdit = true;
         },
-        editItem(report) {
-            this.activeReport = report;
-            this.openReport = true;
+        editItem(item) {
+            this.openAddEdit = true;
+            this.activeItem = item;
         },
-        viewItems(report) {
-            this.activeReport = report;
-            this.openItems = true;
-        },
-        deleteItem(report) {
-            if(confirm("Delete this report?")) {
-                Vue.set(report, 'isDeleting', true);
-                this.$store.dispatch('incomingFinishedGoodReport/deleteReport', report.id).then((res, rej) => {
-                    this.items = this.items.filter(c => c.id != report.id);
+        deleteItem(item) {
+            if(confirm("Are you sure you want to delete this item?")) {
+                Vue.set(item, 'isDeleting', true);
+                this.$store.dispatch('finishedGoodProfile/deleteFinishedGoodProfile', item.id).then((res, rej) => {
+                    this.items = this.items.filter(i => i.id != item.id);
                 }).finally(() => {
-                    Vue.set(report, 'isDeleting', false);
-                })
+                    Vue.set(item, 'isDeleting', false);
+                });
             }
         },
         updateList(data) {
+            console.log(data)
             if(data.mode == 'insert') {
-                this.activeReport = data.report;
-                this.items.push(data.report);
+                this.activeItem = data.finishedGoodProfile;
+                this.items.push(data.finishedGoodProfile);
             } else {
-                this.activeReport.received_date = data.report.received_date;
-                this.activeReport.po_number = data.report.po_number;
-                this.activeReport.rr_number = data.report.rr_number;
-                this.activeReport.pi_number = data.report.pi_number;
-                this.activeReport.truck_number = data.report.truck_number;
+                this.activeItem.id = data.finishedGoodProfile.id;
+                this.activeItem.description = data.finishedGoodProfile.description;
+                this.activeItem.specs = data.finishedGoodProfile.specs;
+                this.activeItem.supplier = data.finishedGoodProfile.supplier;
             }
+        },
+        viewItems(item) {
+            this.activeItem = item;
+            this.openItems = true;
         }
     },
     created() {

@@ -18,6 +18,7 @@ class CreateSerialNumberProfilersTable extends Migration
 
             $table->string('base_table');
             $table->string('redirect')->nullable();
+            $table->string('barcode_label')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
