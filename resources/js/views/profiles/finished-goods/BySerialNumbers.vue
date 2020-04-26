@@ -9,10 +9,10 @@
                         <v-text-field label="Specify date" v-model="date" type="date" append-icon="date" @change="filter" outline></v-text-field>
                     </v-flex>
                     <v-flex>
-                        <v-text-field class="ml-1" label="Search model, description or specs" v-model="keyword" append-icon="search" @keyup="filter" outline></v-text-field>
+                        <v-text-field class="ml-1" label="Search serial number, model, description or specs" v-model="keyword" append-icon="search" @keyup="filter" outline></v-text-field>
                     </v-flex>
                     <v-flex shrink>
-                        <v-combobox class="ml-1" label="Sort by" v-model="sortBy" outline :items="['description', 'model']" @change="filter"></v-combobox>
+                        <v-combobox class="ml-1" label="Sort by" v-model="sortBy" outline :items="['serial_number', 'specs', 'description', 'model']" @change="filter"></v-combobox>
                     </v-flex>
                     <v-flex shrink>
                         <v-combobox class="ml-1" label="Order" v-model="orderBy" outline :items="['asc', 'desc']" @change="filter"></v-combobox>
@@ -22,27 +22,28 @@
             </v-card-text>
         </v-card>
 
-        <v-data-table :headers="headers" :items="items" :loading="loading" hide-actions>
+        <v-expand-transition>
+            <v-btn v-if="selectedItems.length" round @click="print" :loading="printing">Print ({{selectedItems.length}})</v-btn>
+        </v-expand-transition>
+        <v-data-table :headers="headers" :items="items" item-key="serial_number" :loading="loading" hide-actions select-all v-model="selectedItems">
             <template v-slot:items="props">
-                <td>{{props.index + 1}}</td>
-                <td>
-                    <v-checkbox :input-value="props.selected"></v-checkbox>
-                </td>
-                <td>{{ props.item.id }}</td>
-                <td>{{ props.item.description }}</td>
-                <td>{{ props.item.specs }}</td>
-                <td>{{ props.item.supplier }}</td>
-                <td>
-                    <v-btn icon small @click="viewItems(props.item)">
-                        <v-icon small>list</v-icon>
-                    </v-btn>
-                    <v-btn icon small @click="editItem(props.item)">
-                        <v-icon small>edit</v-icon>
-                    </v-btn>
-                    <v-btn icon small @click="deleteItem(props.item)" :loading="props.item.isDeleting">
-                        <v-icon small>delete</v-icon>
-                    </v-btn>
-                </td>
+                <tr :active="props.selected" @click="props.selected = !props.selected">
+                    <td><v-checkbox :input-value="props.selected" :label="`${props.index + 1}`"></v-checkbox></td>
+                    <td>{{ props.item.serial_number }}</td>
+                    <td>{{ props.item.model }}</td>
+                    <td>{{ props.item.description }}</td>
+                    <td>{{ props.item.specs }}</td>
+                    <td>{{ props.item.supplier }}</td>
+                    <td>{{ moment(props.item.created_at).format('LLL') }}</td>
+                    <td>
+                        <v-btn icon small @click="editItem(props.item, $event)">
+                            <v-icon small>edit</v-icon>
+                        </v-btn>
+                        <v-btn icon small @click="deleteItem(props.item, $event)" :loading="props.item.isDeleting">
+                            <v-icon small>delete</v-icon>
+                        </v-btn>
+                    </td>
+                </tr>
             </template>
             <template slot="footer">
                 <td colspan="100%" class="caption grey--text font-italic text-xs-center">
@@ -51,39 +52,37 @@
             </template>
         </v-data-table>
         <v-btn block @click="loadMore" :loading="loading">Load more</v-btn>
-
-        <add-edit-profile v-model="openAddEdit" :finishedGoodProfile="activeItem" @save="updateList" />
-        <items-dialog v-model="openItems" :finishedGood="activeItem" />
+        <v-btn v-if="selectedItems.length" round @click="print" :loading="printing">Print ({{selectedItems.length}})</v-btn>
+        <add-edit-dialog v-model="openAddEdit" :finishedGood="activeItem" @save="updateList" />
     </div>
 </template>
 
 <script>
-import AddEditProfile from './AddEditProfile.vue';
-import ItemsDialog from './ItemsDialog.vue';
+import AddEditDialog from '../../finished-goods/AddEditDialog.vue';
 
 export default {
     components: {
-        AddEditProfile,
-        ItemsDialog
+        AddEditDialog
     },
     data() {
         return {
+            printing: false,
             total: 0,
             keyword: null,
             page: 1,
             date: null,
-            sortBy: 'description',
+            sortBy: 'scanned',
             orderBy: 'desc',
             cancelSource: null,
             items: [],
             loading: false,
             reset: true,
             openAddEdit: false,
-            openItems: false,
             activeItem: null,
+            selectedItems: [],
             headers: [
                 {
-                    text: '',
+                    text: 'Serial number',
                     sortable: false
                 },
                 {
@@ -103,6 +102,10 @@ export default {
                     sortable: false
                 },
                 {
+                    text: 'Scaned/Created',
+                    sortable: false
+                },
+                {
                     text: '',
                     sortable: false
                 }
@@ -119,7 +122,7 @@ export default {
             this.cancelSearch();
             this.cancelSource = axios.CancelToken.source();
             this.loading = true;
-            axios.get('/api/finished-goods/profiles', {
+            axios.get('/api/finished-goods/items', {
                 params: {
                     keyword: this.keyword,
                     page: this.page,
@@ -159,11 +162,13 @@ export default {
             this.activeItem = null;
             this.openAddEdit = true;
         },
-        editItem(item) {
+        editItem(item, e) {
+            e.stopPropagation();
             this.openAddEdit = true;
             this.activeItem = item;
         },
-        deleteItem(item) {
+        deleteItem(item, e) {
+            e.stopPropagation();
             if(confirm("Are you sure you want to delete this item?")) {
                 Vue.set(item, 'isDeleting', true);
                 this.$store.dispatch('finishedGoodProfile/deleteFinishedGoodProfile', item.id).then((res, rej) => {
@@ -176,18 +181,26 @@ export default {
         updateList(data) {
             console.log(data)
             if(data.mode == 'insert') {
-                this.activeItem = data.finishedGoodProfile;
-                this.items.push(data.finishedGoodProfile);
+                this.activeItem = data.finishedGood;
+                this.items.push(data.finishedGood);
             } else {
-                this.activeItem.id = data.finishedGoodProfile.id;
-                this.activeItem.description = data.finishedGoodProfile.description;
-                this.activeItem.specs = data.finishedGoodProfile.specs;
-                this.activeItem.supplier = data.finishedGoodProfile.supplier;
+                this.activeItem.serial_number = data.finishedGood.serial_number;
+                this.activeItem.model = data.finishedGood.model;
+                this.activeItem.description = data.finishedGood.description;
+                this.activeItem.specs = data.finishedGood.specs;
+                this.activeItem.supplier = data.finishedGood.supplier;
             }
         },
-        viewItems(item) {
-            this.activeItem = item;
-            this.openItems = true;
+        print() {
+            this.printing = true;
+            let serialNumbers = this.selectedItems.map(i => i.serial_number);
+            this.$store.dispatch('printer/printSerialNumbers', {
+                params: {
+                    serialNumbers
+                }
+            }).finally(() => {
+                this.printing = false;
+            })
         }
     },
     created() {

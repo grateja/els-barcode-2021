@@ -30,6 +30,18 @@ const actions = {
             return Promise.reject(err);
         });
     },
+    updateFinishedGood(context, data) {
+        context.commit('setSavingStatus', true);
+        context.commit('clearErrors');
+        return axios.post(`/api/finished-goods/items/${data.serialNumber}/update`, data.formData).then((res, rej) => {
+            context.commit('setSavingStatus', false);
+            return res;
+        }).catch(err => {
+            context.commit('setErrors', err.response.data.errors);
+            context.commit('setSavingStatus', false);
+            return Promise.reject(err);
+        });
+    },
     insertSerial(context, data) {
         context.commit('setSavingStatus', true);
         context.commit('clearErrors');
@@ -54,7 +66,7 @@ const actions = {
             return Promise.reject(err);
         });
     },
-    deleteFinishedGood(context, serialNumber) {
+    deleteItem(context, serialNumber) {
         return axios.post(`/api/finished-goods/items/${serialNumber}/delete`);
     }
 };

@@ -197,11 +197,17 @@ Route::group(['prefix' => 'finished-goods', 'middleware' => 'auth:api'], functio
         // /api/finished-goods/items/create
         Route::post('create', 'Api\FinishedGoodItemsController@create');
 
+        // /api/finished-goods/items/{serialNumber}/update
+        Route::post('{serialNumber}/update', 'Api\FinishedGoodItemsController@update');
+
         // /api/finished-goods/items/{model}/insert-serial
         Route::post('{model}/insert-serial', 'Api\FinishedGoodItemsController@insertSerial');
 
         // /api/finished-goods/items/{serialNumber}/update-serial
         Route::post('{serialNumber}/update-serial', 'Api\FinishedGoodItemsController@updateSerial');
+
+        // /api/finished-goods/items/{serialNumber}/delete
+        Route::post('{serialNumber}/delete', 'Api\FinishedGoodItemsController@delete');
     });
 
 });

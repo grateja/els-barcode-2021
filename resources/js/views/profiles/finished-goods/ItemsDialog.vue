@@ -45,6 +45,9 @@
                                                 <v-btn icon small @click="edit(props.item, $event)">
                                                     <v-icon small>edit</v-icon>
                                                 </v-btn>
+                                                <v-btn icon small @click="deleteItem(props.item, $event)">
+                                                    <v-icon small>delete</v-icon>
+                                                </v-btn>
                                             </td>
                                         </tr>
                                     </template>
@@ -66,12 +69,6 @@
                                     <v-icon left>print</v-icon>
                                     Print ({{selectedItems.length}})
                                 </v-btn>
-
-                                <v-btn v-if="selectedItems && selectedItems.length" round small @click="removeItems" :loading="removingItems">
-                                    <v-icon left>clear</v-icon>
-                                    Remove ({{selectedItems.length}})
-                                </v-btn>
-
                             </v-card-actions>
                         </v-card>
                     </v-flex>
@@ -106,7 +103,6 @@ export default {
             loading: false,
             openAddEdit: false,
             activeItem: null,
-            removingItems: false,
             items: [],
             selectedItems: [],
             headers: [
@@ -205,22 +201,14 @@ export default {
                 this.activeItem.current_location = data.finishedGood.current_location;
             }
         },
-        removeItems() {
-            if(this.selectedItems.length < 1) {
-                alert('No items selected');
-                return;
-            }
+        deleteItem(item, e) {
+            e.stopPropagation();
             if(confirm('Remvoe this item(s) from this finished good?')) {
-                this.removingItems = true;
-                this.$store.dispatch('finishedGoodProfile/removeItems', {
-                    reportId: this.finishedGood.id,
-                    formData: {
-                        serialNumbers: this.selectedItems.map(i => i.serial_number)
-                    }
-                }).then((res, rej) => {
-                    this.items = this.items.filter(i => res.data.serialNumbers.indexOf(i.serial_number) < 0);
+                Vue.set(item, 'isDeleting', true);
+                this.$store.dispatch('finishedGood/deleteItem', item.serial_number).then((res, rej) => {
+                    this.items = this.items.filter(i => i.serial_number != item.serial_number);
                 }).finally(() => {
-                    this.removingItems = false;
+                    Vue.set(item, 'isDeleting', false);
                 });
             }
         },

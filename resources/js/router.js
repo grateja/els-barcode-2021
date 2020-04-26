@@ -47,6 +47,10 @@ const routes = [
             {
                 path: 'profiles',
                 component: require('./views/profiles/finished-goods/ByModels.vue').default
+            },
+            {
+                path: 'items',
+                component: require('./views/profiles/finished-goods/BySerialNumbers.vue').default
             }
         ]
     }

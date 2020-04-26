@@ -5939,6 +5939,9 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -6078,6 +6081,239 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _finished_goods_AddEditDialog_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../finished-goods/AddEditDialog.vue */ "./resources/js/views/finished-goods/AddEditDialog.vue");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    AddEditDialog: _finished_goods_AddEditDialog_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      printing: false,
+      total: 0,
+      keyword: null,
+      page: 1,
+      date: null,
+      sortBy: 'scanned',
+      orderBy: 'desc',
+      cancelSource: null,
+      items: [],
+      loading: false,
+      reset: true,
+      openAddEdit: false,
+      activeItem: null,
+      selectedItems: [],
+      headers: [{
+        text: 'Serial number',
+        sortable: false
+      }, {
+        text: 'Model',
+        sortable: false
+      }, {
+        text: 'Description',
+        sortable: false
+      }, {
+        text: 'Specs',
+        sortable: false
+      }, {
+        text: 'Supplier',
+        sortable: false
+      }, {
+        text: 'Scaned/Created',
+        sortable: false
+      }, {
+        text: '',
+        sortable: false
+      }]
+    };
+  },
+  methods: {
+    filter: function filter() {
+      this.reset = true;
+      this.page = 1;
+      this.load();
+    },
+    load: function load() {
+      var _this = this;
+
+      this.cancelSearch();
+      this.cancelSource = axios.CancelToken.source();
+      this.loading = true;
+      axios.get('/api/finished-goods/items', {
+        params: {
+          keyword: this.keyword,
+          page: this.page,
+          sortBy: this.sortBy,
+          orderBy: this.orderBy,
+          date: this.date
+        },
+        cancelToken: this.cancelSource.token
+      }).then(function (res, rej) {
+        if (_this.reset) {
+          _this.items = res.data.result.data;
+          _this.reset = false;
+        } else {
+          _this.items = [].concat(_toConsumableArray(_this.items), _toConsumableArray(res.data.result.data));
+          setTimeout(function () {
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: 'smooth'
+            });
+          }, 10);
+        }
+
+        _this.total = res.data.result.total;
+      }).finally(function () {
+        _this.loading = false;
+      });
+    },
+    cancelSearch: function cancelSearch() {
+      if (this.cancelSource) {
+        this.cancelSource.cancel();
+      }
+    },
+    loadMore: function loadMore() {
+      this.page += 1;
+      this.load();
+    },
+    addItem: function addItem() {
+      this.activeItem = null;
+      this.openAddEdit = true;
+    },
+    editItem: function editItem(item, e) {
+      e.stopPropagation();
+      this.openAddEdit = true;
+      this.activeItem = item;
+    },
+    deleteItem: function deleteItem(item, e) {
+      var _this2 = this;
+
+      e.stopPropagation();
+
+      if (confirm("Are you sure you want to delete this item?")) {
+        Vue.set(item, 'isDeleting', true);
+        this.$store.dispatch('finishedGoodProfile/deleteFinishedGoodProfile', item.id).then(function (res, rej) {
+          _this2.items = _this2.items.filter(function (i) {
+            return i.id != item.id;
+          });
+        }).finally(function () {
+          Vue.set(item, 'isDeleting', false);
+        });
+      }
+    },
+    updateList: function updateList(data) {
+      console.log(data);
+
+      if (data.mode == 'insert') {
+        this.activeItem = data.finishedGood;
+        this.items.push(data.finishedGood);
+      } else {
+        this.activeItem.serial_number = data.finishedGood.serial_number;
+        this.activeItem.model = data.finishedGood.model;
+        this.activeItem.description = data.finishedGood.description;
+        this.activeItem.specs = data.finishedGood.specs;
+        this.activeItem.supplier = data.finishedGood.supplier;
+      }
+    },
+    print: function print() {
+      var _this3 = this;
+
+      this.printing = true;
+      var serialNumbers = this.selectedItems.map(function (i) {
+        return i.serial_number;
+      });
+      this.$store.dispatch('printer/printSerialNumbers', {
+        params: {
+          serialNumbers: serialNumbers
+        }
+      }).finally(function () {
+        _this3.printing = false;
+      });
+    }
+  },
+  created: function created() {
+    this.load();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/profiles/finished-goods/ItemsDialog.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/profiles/finished-goods/ItemsDialog.vue?vue&type=script&lang=js& ***!
@@ -6096,9 +6332,6 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
-//
-//
-//
 //
 //
 //
@@ -6200,7 +6433,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       loading: false,
       openAddEdit: false,
       activeItem: null,
-      removingItems: false,
       items: [],
       selectedItems: [],
       headers: [{
@@ -6295,29 +6527,19 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         this.activeItem.current_location = data.finishedGood.current_location;
       }
     },
-    removeItems: function removeItems() {
+    deleteItem: function deleteItem(item, e) {
       var _this2 = this;
 
-      if (this.selectedItems.length < 1) {
-        alert('No items selected');
-        return;
-      }
+      e.stopPropagation();
 
       if (confirm('Remvoe this item(s) from this finished good?')) {
-        this.removingItems = true;
-        this.$store.dispatch('finishedGoodProfile/removeItems', {
-          reportId: this.finishedGood.id,
-          formData: {
-            serialNumbers: this.selectedItems.map(function (i) {
-              return i.serial_number;
-            })
-          }
-        }).then(function (res, rej) {
+        Vue.set(item, 'isDeleting', true);
+        this.$store.dispatch('finishedGood/deleteItem', item.serial_number).then(function (res, rej) {
           _this2.items = _this2.items.filter(function (i) {
-            return res.data.serialNumbers.indexOf(i.serial_number) < 0;
+            return i.serial_number != item.serial_number;
           });
         }).finally(function () {
-          _this2.removingItems = false;
+          Vue.set(item, 'isDeleting', false);
         });
       }
     },
@@ -61398,7 +61620,7 @@ var render = function() {
           attrs: { round: "", color: "success" },
           on: { click: _vm.addItem }
         },
-        [_vm._v("Add new report")]
+        [_vm._v("Add new")]
       ),
       _vm._v(" "),
       _c(
@@ -61529,6 +61751,16 @@ var render = function() {
               fn: function(props) {
                 return [
                   _c("td", [_vm._v(_vm._s(props.index + 1))]),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    [
+                      _c("v-checkbox", {
+                        attrs: { "input-value": props.selected }
+                      })
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(props.item.id))]),
                   _vm._v(" "),
@@ -61661,6 +61893,355 @@ var render = function() {
             _vm.openItems = $$v
           },
           expression: "openItems"
+        }
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=template&id=16668dc1&":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=template&id=16668dc1& ***!
+  \*************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "v-btn",
+        {
+          staticClass: "ml-0",
+          attrs: { round: "", color: "success" },
+          on: { click: _vm.addItem }
+        },
+        [_vm._v("Add new")]
+      ),
+      _vm._v(" "),
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-card-text",
+            [
+              _c(
+                "v-layout",
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { shrink: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          label: "Specify date",
+                          type: "date",
+                          "append-icon": "date",
+                          outline: ""
+                        },
+                        on: { change: _vm.filter },
+                        model: {
+                          value: _vm.date,
+                          callback: function($$v) {
+                            _vm.date = $$v
+                          },
+                          expression: "date"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    [
+                      _c("v-text-field", {
+                        staticClass: "ml-1",
+                        attrs: {
+                          label:
+                            "Search serial number, model, description or specs",
+                          "append-icon": "search",
+                          outline: ""
+                        },
+                        on: { keyup: _vm.filter },
+                        model: {
+                          value: _vm.keyword,
+                          callback: function($$v) {
+                            _vm.keyword = $$v
+                          },
+                          expression: "keyword"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { shrink: "" } },
+                    [
+                      _c("v-combobox", {
+                        staticClass: "ml-1",
+                        attrs: {
+                          label: "Sort by",
+                          outline: "",
+                          items: [
+                            "serial_number",
+                            "specs",
+                            "description",
+                            "model"
+                          ]
+                        },
+                        on: { change: _vm.filter },
+                        model: {
+                          value: _vm.sortBy,
+                          callback: function($$v) {
+                            _vm.sortBy = $$v
+                          },
+                          expression: "sortBy"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { shrink: "" } },
+                    [
+                      _c("v-combobox", {
+                        staticClass: "ml-1",
+                        attrs: {
+                          label: "Order",
+                          outline: "",
+                          items: ["asc", "desc"]
+                        },
+                        on: { change: _vm.filter },
+                        model: {
+                          value: _vm.orderBy,
+                          callback: function($$v) {
+                            _vm.orderBy = $$v
+                          },
+                          expression: "orderBy"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-expand-transition",
+        [
+          _vm.selectedItems.length
+            ? _c(
+                "v-btn",
+                {
+                  attrs: { round: "", loading: _vm.printing },
+                  on: { click: _vm.print }
+                },
+                [_vm._v("Print (" + _vm._s(_vm.selectedItems.length) + ")")]
+              )
+            : _vm._e()
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-data-table",
+        {
+          attrs: {
+            headers: _vm.headers,
+            items: _vm.items,
+            "item-key": "serial_number",
+            loading: _vm.loading,
+            "hide-actions": "",
+            "select-all": ""
+          },
+          scopedSlots: _vm._u([
+            {
+              key: "items",
+              fn: function(props) {
+                return [
+                  _c(
+                    "tr",
+                    {
+                      attrs: { active: props.selected },
+                      on: {
+                        click: function($event) {
+                          props.selected = !props.selected
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "td",
+                        [
+                          _c("v-checkbox", {
+                            attrs: {
+                              "input-value": props.selected,
+                              label: "" + (props.index + 1)
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(props.item.serial_number))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(props.item.model))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(props.item.description))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(props.item.specs))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(props.item.supplier))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.moment(props.item.created_at).format("LLL")
+                          )
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { icon: "", small: "" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.editItem(props.item, $event)
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { small: "" } }, [
+                                _vm._v("edit")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                icon: "",
+                                small: "",
+                                loading: props.item.isDeleting
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteItem(props.item, $event)
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { small: "" } }, [
+                                _vm._v("delete")
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ]
+                  )
+                ]
+              }
+            }
+          ]),
+          model: {
+            value: _vm.selectedItems,
+            callback: function($$v) {
+              _vm.selectedItems = $$v
+            },
+            expression: "selectedItems"
+          }
+        },
+        [
+          _vm._v(" "),
+          _c("template", { slot: "footer" }, [
+            _c(
+              "td",
+              {
+                staticClass: "caption grey--text font-italic text-xs-center",
+                attrs: { colspan: "100%" }
+              },
+              [
+                _c("strong", [
+                  _vm._v(
+                    "Showing " +
+                      _vm._s(_vm.items.length) +
+                      " out of " +
+                      _vm._s(_vm.total) +
+                      " result"
+                  )
+                ])
+              ]
+            )
+          ])
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c(
+        "v-btn",
+        {
+          attrs: { block: "", loading: _vm.loading },
+          on: { click: _vm.loadMore }
+        },
+        [_vm._v("Load more")]
+      ),
+      _vm._v(" "),
+      _vm.selectedItems.length
+        ? _c(
+            "v-btn",
+            {
+              attrs: { round: "", loading: _vm.printing },
+              on: { click: _vm.print }
+            },
+            [_vm._v("Print (" + _vm._s(_vm.selectedItems.length) + ")")]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("add-edit-dialog", {
+        attrs: { finishedGood: _vm.activeItem },
+        on: { save: _vm.updateList },
+        model: {
+          value: _vm.openAddEdit,
+          callback: function($$v) {
+            _vm.openAddEdit = $$v
+          },
+          expression: "openAddEdit"
         }
       })
     ],
@@ -62010,6 +62591,38 @@ var render = function() {
                                                             )
                                                           ],
                                                           1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-btn",
+                                                          {
+                                                            attrs: {
+                                                              icon: "",
+                                                              small: ""
+                                                            },
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.deleteItem(
+                                                                  props.item,
+                                                                  $event
+                                                                )
+                                                              }
+                                                            }
+                                                          },
+                                                          [
+                                                            _c(
+                                                              "v-icon",
+                                                              {
+                                                                attrs: {
+                                                                  small: ""
+                                                                }
+                                                              },
+                                                              [_vm._v("delete")]
+                                                            )
+                                                          ],
+                                                          1
                                                         )
                                                       ],
                                                       1
@@ -62022,7 +62635,7 @@ var render = function() {
                                         ],
                                         null,
                                         false,
-                                        3232985179
+                                        1335414095
                                       ),
                                       model: {
                                         value: _vm.selectedItems,
@@ -62114,33 +62727,6 @@ var render = function() {
                                           ),
                                           _vm._v(
                                             "\n                                Print (" +
-                                              _vm._s(_vm.selectedItems.length) +
-                                              ")\n                            "
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  _vm.selectedItems && _vm.selectedItems.length
-                                    ? _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            round: "",
-                                            small: "",
-                                            loading: _vm.removingItems
-                                          },
-                                          on: { click: _vm.removeItems }
-                                        },
-                                        [
-                                          _c(
-                                            "v-icon",
-                                            { attrs: { left: "" } },
-                                            [_vm._v("clear")]
-                                          ),
-                                          _vm._v(
-                                            "\n                                Remove (" +
                                               _vm._s(_vm.selectedItems.length) +
                                               ")\n                            "
                                           )
@@ -106799,6 +107385,9 @@ var routes = [{
   children: [{
     path: 'profiles',
     component: __webpack_require__(/*! ./views/profiles/finished-goods/ByModels.vue */ "./resources/js/views/profiles/finished-goods/ByModels.vue").default
+  }, {
+    path: 'items',
+    component: __webpack_require__(/*! ./views/profiles/finished-goods/BySerialNumbers.vue */ "./resources/js/views/profiles/finished-goods/BySerialNumbers.vue").default
   }]
 }];
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
@@ -107354,6 +107943,18 @@ var actions = {
       return Promise.reject(err);
     });
   },
+  updateFinishedGood: function updateFinishedGood(context, data) {
+    context.commit('setSavingStatus', true);
+    context.commit('clearErrors');
+    return axios.post("/api/finished-goods/items/".concat(data.serialNumber, "/update"), data.formData).then(function (res, rej) {
+      context.commit('setSavingStatus', false);
+      return res;
+    }).catch(function (err) {
+      context.commit('setErrors', err.response.data.errors);
+      context.commit('setSavingStatus', false);
+      return Promise.reject(err);
+    });
+  },
   insertSerial: function insertSerial(context, data) {
     context.commit('setSavingStatus', true);
     context.commit('clearErrors');
@@ -107378,7 +107979,7 @@ var actions = {
       return Promise.reject(err);
     });
   },
-  deleteFinishedGood: function deleteFinishedGood(context, serialNumber) {
+  deleteItem: function deleteItem(context, serialNumber) {
     return axios.post("/api/finished-goods/items/".concat(serialNumber, "/delete"));
   }
 };
@@ -110124,6 +110725,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ByModels_vue_vue_type_template_id_0b4ccaef___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ByModels_vue_vue_type_template_id_0b4ccaef___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/profiles/finished-goods/BySerialNumbers.vue":
+/*!************************************************************************!*\
+  !*** ./resources/js/views/profiles/finished-goods/BySerialNumbers.vue ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _BySerialNumbers_vue_vue_type_template_id_16668dc1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BySerialNumbers.vue?vue&type=template&id=16668dc1& */ "./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=template&id=16668dc1&");
+/* harmony import */ var _BySerialNumbers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BySerialNumbers.vue?vue&type=script&lang=js& */ "./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _BySerialNumbers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _BySerialNumbers_vue_vue_type_template_id_16668dc1___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _BySerialNumbers_vue_vue_type_template_id_16668dc1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/profiles/finished-goods/BySerialNumbers.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BySerialNumbers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./BySerialNumbers.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BySerialNumbers_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=template&id=16668dc1&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=template&id=16668dc1& ***!
+  \*******************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BySerialNumbers_vue_vue_type_template_id_16668dc1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./BySerialNumbers.vue?vue&type=template&id=16668dc1& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/profiles/finished-goods/BySerialNumbers.vue?vue&type=template&id=16668dc1&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BySerialNumbers_vue_vue_type_template_id_16668dc1___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_BySerialNumbers_vue_vue_type_template_id_16668dc1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
