@@ -14,7 +14,15 @@ class Account extends Model
         'id', 'name', 'department',
     ];
 
+    public $appends = [
+        'employee_id',
+    ];
+
     public function fixedAssets() {
         return $this->hasMany('App\FixedAsset');
+    }
+
+    public function getEmployeeIdAttribute() {
+        return $this->id;
     }
 }

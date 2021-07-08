@@ -252,9 +252,47 @@ Route::group(['prefix' => 'spare-parts', 'middleware' => 'auth:api'], function (
 });
 
 // /api/fixed-assets
-Route::group(['prefix' => 'fixed-assets'], function() {
+Route::group(['prefix' => 'fixed-assets', 'middleware' => 'auth:api'], function() {
     // /api/fixed-assets/generate-serial
     Route::get('generate-serial', 'Api\FixedAssetsController@generateSerial');
+
+    // /api/fixed-assets/accounts
+    Route::group(['prefix' => 'accounts'], function () {
+        Route::get('/', 'Api\FixedAssetAccountsController@index');
+
+        // /api/fixed-assets/accounts/create
+        Route::post('create', 'Api\FixedAssetAccountsController@create');
+
+        // /api/fixed-assets/accounts/{accountId}/update
+        Route::post('{accountId}/update', 'Api\FixedAssetAccountsController@update');
+
+        // /api/fixed-assets/accounts/{accountId}/delete
+        Route::post('{accountId}/delete', 'Api\FixedAssetAccountsController@delete');
+    });
+
+    // /api/fixed-assets/items
+    Route::group(['prefix' => 'items'], function () {
+        // /api/fixed-assets/items/{accountId?}
+        Route::get('{accountId?}', 'Api\FixedAssetItemsController@index');
+
+        // /api/fixed-assets/items/create
+        Route::post('create', 'Api\FixedAssetItemsController@create');
+
+        // /api/fixed-assets/items/{serialNumber}/update
+        Route::post('{serialNumber}/update', 'Api\FixedAssetItemsController@update');
+
+        // /api/fixed-assets/items/{serialNumber}/update-serial
+        Route::post('{serialNumber}/update-serial', 'Api\FixedAssetItemsController@updateSerial');
+
+        // /api/fixed-assets/items/{accountId}/insert-serial
+        Route::post('{accountId}/insert-serial', 'Api\FixedAssetItemsController@insertSerial');
+
+        // /api/fixed-assets/items/{accountId}/remove/{serialNumber}
+        Route::post('{accountId}/remove/{serialNumber}', 'Api\FixedAssetItemsController@removeFromAccount');
+
+        // /api/fixed-assets/items/{accountId}/delete
+        Route::post('{accountId}/delete', 'Api\FixedAssetItemsController@delete');
+    });
 });
 
 // /api/clients

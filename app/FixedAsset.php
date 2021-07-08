@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\UsesOrders;
 use App\Traits\UsesSerialProfiler;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Model;
@@ -9,11 +10,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FixedAsset extends Model
 {
-    use UsesUuid, SoftDeletes, UsesSerialProfiler;
+    use UsesUuid, SoftDeletes, UsesSerialProfiler, UsesOrders;
 
     protected $fillable = [
         'id', 'description', 'specs', 'account_id', 'created_at',
     ];
+
+    public $appends = [
+        'serial_number',
+        'date_issued',
+    ];
+
+    static function orders() {
+        return [
+            'description' => 'description',
+            'serial number' => 'id',
+            'account name' => 'accounts.name',
+            'issued' => 'fixed_assets.created_at',
+        ];
+    }
 
     public function account() {
         return $this->belongsTo('App\Account');
@@ -33,6 +48,10 @@ class FixedAsset extends Model
 
     public function fixedAssetRemarks() {
         return $this->hasMany('App\FixedAssetRemarks');
+    }
+
+    public function getSerialNumberAttribute() {
+        return $this->id;
     }
 
     public function getDateIssuedAttribute() {

@@ -5,9 +5,6 @@
         <v-card>
             <v-card-text>
                 <v-layout>
-                    <v-flex shrink>
-                        <v-text-field label="Specify date" v-model="date" type="date" append-icon="date" @change="filter" outline></v-text-field>
-                    </v-flex>
                     <v-flex>
                         <v-text-field class="ml-1" label="Search model, description or specs" v-model="keyword" append-icon="search" @keyup="filter" outline></v-text-field>
                     </v-flex>
@@ -68,7 +65,6 @@ export default {
             total: 0,
             keyword: null,
             page: 1,
-            date: null,
             sortBy: 'description',
             orderBy: 'desc',
             cancelSource: null,
@@ -121,8 +117,7 @@ export default {
                     keyword: this.keyword,
                     page: this.page,
                     sortBy: this.sortBy,
-                    orderBy: this.orderBy,
-                    date: this.date
+                    orderBy: this.orderBy
                 },
                 cancelToken: this.cancelSource.token
             }).then((res, rej) => {

@@ -148,7 +148,7 @@ export default {
                     icon: 'account_balance_wallet',
                     roles: ['admin', 'developer'],
                     color: '#a7a1e6',
-                    to: '/fixed-assets'
+                    to: '/fixed-assets/accounts'
                 },
                 {
                     text: 'Queues',

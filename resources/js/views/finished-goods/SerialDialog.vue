@@ -67,9 +67,9 @@ export default {
                 this.formData.currentLocation = this.finishedGood.current_location;
             } else {
                 this.mode = 'insert';
-                this.formData.serialNumber = null;
-                this.formData.warehouse = null;
-                this.formData.currentLocation = null;
+                //this.formData.serialNumber = null;
+                //this.formData.warehouse = null;
+                //this.formData.currentLocation = null;
             }
             setTimeout(() => {
                 this.$refs.serialNumber.$el.querySelector('input').select();

@@ -22,6 +22,8 @@ import outgoingSparePartReport from './modules/outgoingSparePartReport.js';
 
 import finishedGoodProfile from './modules/finishedGoodProfile.js';
 import sparePartProfile from './modules/sparePartProfile.js';
+import fixedAssetAccount from './modules/fixedAssetAccount.js';
+import fixedAsset from './modules/fixedAsset.js';
 
 export default new  Vuex.Store({
     state: {
@@ -85,6 +87,8 @@ export default new  Vuex.Store({
         outgoingFinishedGoodReport,
         outgoingSparePartReport,
         finishedGoodProfile,
-        sparePartProfile
+        sparePartProfile,
+        fixedAssetAccount,
+        fixedAsset
     }
 });

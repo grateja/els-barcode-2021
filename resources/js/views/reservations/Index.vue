@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <h3 class="title grey--text">Reservations</h3>
         <v-divider class="my-3"></v-divider>
         <v-btn class="ml-0" round color="success" @click="addReport">Add new report</v-btn>
         <v-card>

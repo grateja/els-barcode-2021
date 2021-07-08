@@ -67,6 +67,20 @@ const routes = [
                 component: require('./views/profiles/spare-parts/BySerialNumbers.vue').default
             }
         ]
+    },
+    {
+        path: '/fixed-assets',
+        component: require('./views/fixed-assets/Index.vue').default,
+        children: [
+            {
+                path: 'accounts',
+                component: require('./views/fixed-assets/accounts/Index.vue').default
+            },
+            {
+                path: 'items',
+                component: require('./views/fixed-assets/items/Index.vue').default
+            }
+        ]
     }
 ];
 
