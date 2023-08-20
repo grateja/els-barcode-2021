@@ -6,26 +6,26 @@
     <button onclick="window.print()" class="btn-print">Print ({{count($items)}})</button>
 </div>
 
-@foreach($items as $item)
+@for($i = 0; $i < count($items); $i+=2)
     <div class="barcode-print">
         <div class="barcode-wrapper">
-            <div class="barcode_label">{{ $item['barcode_label'] ?? $item['id'] }}  </div>
+            <div class="barcode_label">{{ $items[$i]['barcode_label'] ?? $items[$i]['id'] }}  </div>
             <div class="img-wrapper">
                 <img src="{{ asset('img/logo.jpg') }}" alt="logo" class="logo">
-                @include('printer._barcode', ['code' => $item['id']])
+                @include('printer._barcode', ['code' => $items[$i]['id']])
             </div>
-            <div class="code">{{ $item['id'] }}</div>
+            <div class="code">{{ $items[$i]['id'] }}</div>
         </div>
         <div class="barcode-wrapper">
-            <div class="barcode_label">{{ $item['barcode_label'] ?? $item['id'] }}</div>
+            <div class="barcode_label">{{ $items[$i + 1]['barcode_label'] ?? $items[$i + 1]['id'] }}</div>
             <div class="img-wrapper">
                 <img src="{{ asset('img/logo.jpg') }}" alt="logo" class="logo">
-                @include('printer._barcode', ['code' => $item['id']])
+                @include('printer._barcode', ['code' => $items[$i + 1]['id']])
             </div>
-            <div class="code">{{ $item['id'] }}</div>
+            <div class="code">{{ $items[$i + 1]['id'] }}</div>
         </div>
     </div>
-@endforeach
+@endfor
 
 @endsection
 
